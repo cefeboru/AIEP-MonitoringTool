@@ -4782,54 +4782,50 @@ public class MonitoringTool {
 		return RESULTS;
 	}
 
-	
-	public String getTablePagesStudentControl(String Headquarter, int currentPage, String modalidad) {
+	public int getStudentControlPagesNum(String Headquarter , String modalidad) {
 		StringBuilder RESULTS = new StringBuilder();
 		ConnectionManager cManager = null;
 		Connection conn = null;
 
 		cManager = BbDatabase.getDefaultInstance().getConnectionManager();
-
+		int numberOfPages = 1;
 		try {
 			conn = cManager.getConnection();
+			
+			StringBuilder tableDataCount =  new StringBuilder();
+			tableDataCount.append("SELECT COUNT(*) FROM (");
+			tableDataCount.append("SELECT US.PK1, US.LASTNAME, US.FIRSTNAME, EXTRACT(year from US.DTCREATED) \"COHORTE\","
+					+ " US.EMAIL, US.LAST_LOGIN_DATE, (systimestamp - US.LAST_LOGIN_DATE) \"Date Diff\" "
+					+ "FROM USERS US ");
 
-			String paginationQuery = "SELECT COUNT(*) FROM USERS US ";
 			if (Headquarter.equals("All") && modalidad.equals("All")) {
-				paginationQuery += "WHERE US.INSTITUTION_ROLES_PK1 IN( " + "SELECT IR.PK1 FROM INSTITUTION_ROLES IR "
-						+ "WHERE IR.ROLE_ID IN('Online','Semipresencial','Presencial'))";
-			} else if (modalidad.equals("All")) {
-				paginationQuery += "WHERE US.INSTITUTION_ROLES_PK1 IN( SELECT IR.PK1 FROM INSTITUTION_ROLES IR "
-						+ "WHERE IR.ROLE_ID IN('Online','Semipresencial','Presencial')) AND US.B_PHONE_1='"
-						+ Headquarter + "'";
+				tableDataCount.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
+				tableDataCount.append("SELECT PK1 FROM INSTITUTION_ROLES ");
+				tableDataCount.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
+				
 			} else if (Headquarter.equals("All")) {
-				paginationQuery += "WHERE US.INSTITUTION_ROLES_PK1=" + modalidad;
+				tableDataCount.append("WHERE US.INSTITUTION_ROLES_PK1=" + modalidad + " ");
+			} else if (modalidad.equals("All")) {
+				tableDataCount.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
+				tableDataCount.append("SELECT PK1 FROM INSTITUTION_ROLES ");
+				tableDataCount.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
+				tableDataCount.append("AND US.B_PHONE_1 ='" + Headquarter + "' ");
+				tableDataCount.append("AND US.B_PHONE_1 IS NOT NULL ");
 			} else {
-				paginationQuery += "WHERE US.INSTITUTION_ROLES_PK1=" + modalidad + " AND US.B_PHONE_1='" + Headquarter
-						+ "'";
+				tableDataCount.append("WHERE US.INSTITUTION_ROLES_PK1=" + modalidad + " ");
+				tableDataCount.append("AND US.B_PHONE_1= '" + Headquarter + "' ");
+				tableDataCount.append("AND US.B_PHONE_1 IS NOT NULL ");
 			}
+			tableDataCount.append("AND US.SYSTEM_ROLE = 'N' ");
+			tableDataCount.append("AND US.DATA_SRC_PK1 != 2 )");
 
-			System.out.println("Monitoring Tool-Pagination Query:" + paginationQuery);
-			ResultSet rs = conn.createStatement().executeQuery(paginationQuery);
+			ResultSet rs = conn.createStatement().executeQuery(tableDataCount.toString());
 
-			int count = 0;
 			if (rs.next()) {
-				count = rs.getInt(1);
-				double paginas = (double) (count) / pageSize;
-				int i = 1;
-				while (paginas > 0) {
-					if (i == currentPage) {
-						RESULTS.append("<li style=\"display:inline-block;\" " + "class=\"active\"><a href=\"#\">" + i
-								+ "</a></li>");
-					} else {
-						RESULTS.append("<li onclick=\"selectPage(" + i + ");\" "
-								+ " style=\"display:inline-block;\"><a href=\"#\">" + i + "</a></li>");
-					}
-					paginas--;
-					i++;
-				}
-			} else
-				return "";
-
+				int numberOfRows = rs.getInt(1);
+				numberOfPages = (int) Math.ceil((double)numberOfRows / this.pageSize);
+				
+			}
 		} catch (ConnectionNotAvailableException e) {
 			e.printStackTrace();
 			RESULTS.append(e.getFullMessageTrace());
@@ -4837,10 +4833,10 @@ public class MonitoringTool {
 			e.printStackTrace();
 			RESULTS.append(e.getMessage());
 		}
-
 		cManager.releaseConnection(conn);
-		return RESULTS.toString();
+		return numberOfPages;
 	}
+	
 	
 	public String getTablePagesCourseControl(String Headquarter, int currentPage, String modalidad) {
 		StringBuilder RESULTS = new StringBuilder();
@@ -5176,18 +5172,19 @@ public class MonitoringTool {
 			String Modalidad = request.getParameter("Modalidad");
 			String pageString = request.getParameter("currentPage");
 			String HTMLTable = "You Selected an invalid option";
-			int page = Integer.valueOf(pageString != null ? pageString : "1");
-			String tablePagination = getTablePagesStudentControl(Headquarter, page, Modalidad);
+			int currentPage = Integer.valueOf(pageString != null ? pageString : "1");
+			int totalPages = this.getStudentControlPagesNum(Headquarter, Modalidad);
 
 			if (Headquarter != null) {
-				HTMLTable = getStudentControl(Headquarter, page, Modalidad);
+				HTMLTable = getStudentControl(Headquarter, currentPage, Modalidad);
 
 			}
 
 			model.addAttribute("HTMLTable", HTMLTable);
-			model.addAttribute("tablePagination", tablePagination);
-			model.addAttribute("Headquarter", Headquarter);
-			model.addAttribute("Modalidad", Modalidad);
+			model.addAttribute("totalPages", totalPages);
+			model.addAttribute("currentPage", currentPage);
+			
+
 
 		} catch (Exception e) {
 
