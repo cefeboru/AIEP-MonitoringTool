@@ -7,6 +7,16 @@
 <%@ page import="java.util.*"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
+<bbNG:learningSystemPage ctxId="bbContext">
+<bbNG:breadcrumbBar environment="CTRL_PANEL ">
+		<bbNG:breadcrumb>${ReportName}</bbNG:breadcrumb>
+		<bbNG:pageHeader>
+			<bbNG:pageTitleBar title="Regularizar Asistencia">Regularizar Asistencia</bbNG:pageTitleBar>
+
+		</bbNG:pageHeader>
+	</bbNG:breadcrumbBar>
+</bbNG:learningSystemPage>
+
   		<bbNG:genericPage title="${ReportName}">
 	<bbNG:pageHeader>
 		<bbNG:pageTitleBar title="${ReportName}"/>
@@ -15,10 +25,22 @@
 	
 		<bbNG:form id="AdminForm" method = "POST" action = "${actionUrl}" enctype="application/x-www-form-urlencoded">
 			<bbNG:dataCollection>
-
-				<bbNG:step id="CourseReport" title="Seguimiento Curso SP" instructions= ".">
+				<bbNG:step id="Filtros" title="Filtros" instructions= ".">
+					<div>
+						<form id="filtersFormCourseControl">
+							<label>Modulo:</label><input type="text" id="Modulo">&emsp;
+							<label>Secci&oacute;n:</label><input type="text" id="Seccion">&emsp;
+							<label>A&ntilde;o:</label><input type="text" id="Anio">&emsp;
+							<label>Semestre:</label><input type="text" id="Semestre">&emsp;
+							<label>Modalidad:</label><input type="text" id="Modalidad">&emsp;
+							<input type="submit" value="Buscar">
+						</form>
+					</div><br>
 					<div id="CourseData">
 						${HTMLCourses}
+						<nav>
+							<ul class="pagination">${TablePages}</ul>
+						</nav>
 					</div>
 				</bbNG:step>
 				<bbNG:stepSubmit showCancelButton= "False"><bbNG:stepSubmitButton id="SubmitButton" label="Submit"></bbNG:stepSubmitButton></bbNG:stepSubmit>
@@ -63,11 +85,6 @@ $( document ).ready( function() {
 			overflow-y: hidden;
 			margin-left: 20px;
   			margin-right: 20px;
-		}
-		td, th {
-		  max-width: 500px !important;
-		  word-wrap: break-word !important;
-		  white-space: pre-wrap !important;
 		}
 		.dropdown-menu.pull-right {
 		

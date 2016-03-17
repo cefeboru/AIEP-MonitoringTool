@@ -16,10 +16,16 @@
 		<bbNG:form id="AdminForm" method = "POST" action = "${actionUrl}" enctype="application/x-www-form-urlencoded">
 			<bbNG:dataCollection>
 
-				<bbNG:step id="Sedes" title="Sedes" instructions= "Seleccione una Sede">
-					${HTMLHeadquarters} <input type="button" id ="Filter" value="Filtrar">
+				<bbNG:step id="Sedes" title="Filtros"
+					instructions="Seleccione una Sede">
+						Modalidad: ${HTMLModalidades} Sede: ${HTMLHeadquarters}<input
+						type="button" id="Filter" value="Filtrar">
 				</bbNG:step>
-				<bbNG:stepSubmit showCancelButton= "False"><bbNG:stepSubmitButton id="SubmitButton" label="Submit"></bbNG:stepSubmitButton></bbNG:stepSubmit>
+	
+	
+				<bbNG:stepSubmit showCancelButton="False">
+					<bbNG:stepSubmitButton id="SubmitButton" label="Submit"></bbNG:stepSubmitButton>
+				</bbNG:stepSubmit>
 				
 				<bbNG:step id="InstructorReport" title="Control de Accesso de Docentes" instructions= ".">
 					<div id="InstructorData"></div>
@@ -28,6 +34,9 @@
 				</bbNG:step>
 				<bbNG:stepSubmit showCancelButton= "False"><bbNG:stepSubmitButton id="SubmitButton" label="Submit"></bbNG:stepSubmitButton></bbNG:stepSubmit>
 				
+				<div id="DownloadReport" style="display:block;">
+					<img src="/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/xls.png" style="width: 2%;">&nbsp;<label id="DownloadReport" style="font-size: 84%;font-Weight: bold;cursor: pointer;">Descargar Listado</label>&nbsp;&nbsp;&nbsp;&nbsp;
+				</div>
 			</bbNG:dataCollection>
 		</bbNG:form>
 
@@ -65,6 +74,8 @@ $( document ).ready( function() {
 	    	
 	    	
 	    	var SelectedHeadquarter = document.getElementById("Headquarters").value;
+	    	var SelectedModalidad = document.getElementById("Modalidades").value;
+	    	
 	    	document.getElementById("InstructorData").innerHTML = "";
 	    	
 	    	$.ajax({
@@ -74,6 +85,7 @@ $( document ).ready( function() {
 		        	   
 		        	   Sede: SelectedHeadquarter,
 		        	   Report: "Access",
+		        	   Modalidad: SelectedModalidad,
 		           },
 		           datatype:'text',
 		           success:function(result){
@@ -104,6 +116,134 @@ $( document ).ready( function() {
 		       	    }
 		           });
 	    };
+	    
+	    var a = document.getElementById("TableData");
+	    var b = a.parentNode;
+	    b.insertBefore(document.getElementById("InstructorData"),a.nextSibling);
+	    
+	    var RowCount = -1;
+	    var FetchSize = 100;
+	    var NumRequests = 0;
+	    var ReportTable = null;
+	    var AllRequests = [];
+
+	    
+		document.getElementById("DownloadReport").onclick = function(){
+			
+			/*
+			RowCount = -1;
+		    FetchSize = 100;
+		    NumRequests = 0;
+		    ReportTable = null;
+		    AllRequests = [];
+			
+			CreateReportDiv();
+			GetReportRowCount();
+			*/
+			
+			//window.location = "https://"+ window.location.hostname +"/webapps/lnoh-AIEPMTOOL-BBLEARN/app/DownloadInstructorAccessReport?HTMLTable=" + encodeURIComponent(document.getElementById("ReportData").innerHTML);
+			
+			window.location = "https://"+ window.location.hostname +"/webapps/lnoh-AIEPMTOOL-BBLEARN/app/DownloadInstructorAccessReport?Sede=" + document.getElementById("Headquarters").value + "&Modalidad=" + document.getElementById("Modalidades").value;
+	    };
+	    
+	    function GetReportRowCount(){
+
+	    	var xhr = new XMLHttpRequest();
+	    	xhr.responseType = 'text';
+	    	xhr.onload = function() {
+
+	    		RowCount =  xhr.response;
+	    		console.log(RowCount);
+	    		
+	    		if(FetchSize > RowCount){
+	    			
+	    			FetchReportData(0,RowCount);
+	    		}
+				else{
+					
+					FetchReportData(0,FetchSize);	
+				}
+	    	};
+
+	    	xhr.open('GET', "https://"+ window.location.hostname +"/webapps/lnoh-AIEPMTOOL-BBLEARN/app/InstructorAccessGetRowCount?Sede=" + document.getElementById("Headquarters").value + "&Modalidad=" + document.getElementById("Modalidades").value);
+	    	xhr.send();
+	    }
+
+	    function CreateReportDiv(){
+
+	    	var temp = document.getElementById("ReportData");
+
+	    	if(temp != null){
+
+	    		temp.remove();
+	    	}
+
+	    	var FormTable = document.getElementById("InstructorData").cloneNode(true);
+	    	FormTable.getElementsByTagName("nav")[0].remove();
+	    	FormTable.id = "ReportData";
+	    	var AllRows = Array.prototype.slice.call(FormTable.getElementsByTagName("tbody")[0].getElementsByTagName("tr"));
+	    	AllRows.forEach(function(row){row.remove()});
+
+	    	var ReportDiv = document.createElement("div");
+	    	ReportDiv.id = "ReportData";
+	    	ReportDiv.style.display = "none";
+	    	ReportDiv.innerHTML = FormTable.innerHTML;
+
+	    	document.body.appendChild(ReportDiv);
+
+	    	document.getElementById("ReportData").getElementsByTagName("table")[0].id = "grid-basic-Report-Data"
+	    }
+
+	    function FetchReportData(FirstRow,LastRow){
+
+	    	if(FirstRow < RowCount){
+
+	    		if(LastRow <= RowCount){
+
+	    			console.log("FirstRow: " + FirstRow + " LastRow: " + LastRow);
+	    			NumRequests++;
+
+	    			var xhr = new XMLHttpRequest();
+	    			xhr.responseType = 'text';
+	    			xhr.onload = function() {
+
+	    				AllRequests.push(xhr.response);
+	    				console.log(xhr.response.split("</tr>").length);
+	    				FirstRow = LastRow;
+	    				LastRow += FetchSize;
+
+	    				if(LastRow > RowCount){
+
+	    					LastRow = RowCount;
+	    				}
+
+	    				FetchReportData(FirstRow,LastRow);
+	    			};
+
+	    			xhr.open('GET', "https://"+ window.location.hostname +"/webapps/lnoh-AIEPMTOOL-BBLEARN/app/InstructorAccessReport?Sede=" + document.getElementById("Headquarters").value + "&Modalidad=" + document.getElementById("Modalidades").value + "&firstRow="+ FirstRow +"&lastRow=" + LastRow);
+	    			xhr.send();
+	    		}
+	    		else{
+	    			
+	    			FirstRow = LastRow;
+    				LastRow += FetchSize;
+
+    				if(LastRow > RowCount){
+
+    					LastRow = RowCount;
+    				}
+
+    				FetchReportData(FirstRow,LastRow);
+	    		}
+	    	}
+	    	else{
+	    		var num = 0;
+	    		AllRequests.forEach(function(c){ num++; console.log(num); $("#grid-basic-Report-Data").find("tbody").append(c); console.log($("#grid-basic-Report-Data").find("tbody")[0].children.length)});
+	    		window.open('data:application/vnd.ms-excel,' + encodeURIComponent($('#ReportData').html()));
+	    		console.log("FINISHED REQUESTS: " + NumRequests);
+	    	}
+	    }
+
 });
 
 </script>
@@ -117,11 +257,7 @@ $( document ).ready( function() {
 			margin-left: 20px;
   			margin-right: 20px;
 		}
-		td, th {
-		  max-width: 500px !important;
-		  word-wrap: break-word !important;
-		  white-space: pre-wrap !important;
-		}
+
 		.dropdown-menu.pull-right {
 		
 		    margin-top: 0px !important;

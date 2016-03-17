@@ -17,11 +17,9 @@
                   <description value="LNO Honduras" />
             </vendor>
 
-            <http-actions>
-            </http-actions>
-
             <schema-dirs>
             	<schema-dir dir-name="AIEPDB" />
+            	<schema-dir dir-name="Settings" />
             </schema-dirs>
 			
 			<module-defs>

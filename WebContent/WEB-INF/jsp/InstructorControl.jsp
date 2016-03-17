@@ -16,18 +16,22 @@
 		<bbNG:form id="AdminForm" method = "POST" action = "${actionUrl}" enctype="application/x-www-form-urlencoded">
 			<bbNG:dataCollection>
 
-				<bbNG:step id="Sedes" title="Sedes" instructions= "Seleccione una Sede">
-					${HTMLHeadquarters} <input type="button" id ="Filter" value="Filtrar">
+				<bbNG:step id="Filtros" title="Filtros" instructions= "">
+					<label>Sede: </label>${HTMLHeadquarters}&emsp;
+					<!--label>Modulo:&emsp;</label><input type="text" id="Modulo">&emsp;
+					<label>A&ntilde;o:</label><select id="Anio">${YearsOptions}</select>&emsp;
+					<label>Semestre:</label><input type="text" id="Semestre">&emsp;
+					<label>Modalidad:</label><input type="text" id="Modalidad">&emsp;-->
+					<input type="button" id ="Filter" value="Filtrar">
 				</bbNG:step>
 				<bbNG:stepSubmit showCancelButton= "False"><bbNG:stepSubmitButton id="SubmitButton" label="Submit"></bbNG:stepSubmitButton></bbNG:stepSubmit>
 				
-				<bbNG:step id="InstructorReport" title="Control de Docentes SP" instructions= ".">
+
 					<div id="InstructorData"></div>
 					
 					<div id="DownloadReport" style="display:none;">
 					<img src="/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/xls.png" style="width: 2%;">&nbsp;<label id="DownloadReport" style="font-size: 84%;font-Weight: bold;cursor: pointer;">Descargar Listado</label>&nbsp;&nbsp;&nbsp;&nbsp;
 					</div>
-				</bbNG:step>
 				<bbNG:stepSubmit showCancelButton= "False"><bbNG:stepSubmitButton id="SubmitButton" label="Submit"></bbNG:stepSubmitButton></bbNG:stepSubmit>
 				
 			</bbNG:dataCollection>
@@ -37,6 +41,57 @@
 <script src="/webapps/lnoh-AIEPMTOOL-BBLEARN/Jquery/jquery-2.1.3.min.js"></script>
 <script src="/webapps/lnoh-AIEPMTOOL-BBLEARN/Jquery/jquery.bootgrid.min.js"></script>
 <script type="text/javascript">
+
+function goToPage(page){
+	var SelectedHeadquarter = document.getElementById("Headquarters").value;
+	
+	document.getElementById("InstructorData").innerHTML = "Loading...";
+	document.getElementById("DownloadReport").style.display = "none";
+	$("#dvData").remove();
+	
+	$.ajax({
+        type:'GET',
+        url:'InstructorsInfo',
+        data:{
+     	   
+     	   Sede: SelectedHeadquarter,
+     	   Report: "Activity",
+     	   Page: page,
+        },
+        datatype:'text',
+        success:function(result){
+            
+	            document.getElementById("InstructorData").innerHTML = result;
+	            
+	            if(result.indexOf("<table ") != -1){
+	            	
+	            	document.getElementById("DownloadReport").style.display = "block";
+	            }
+    		},
+    		error: function (jqXHR, exception) {
+    			
+    	        var msg = '';
+    	        
+    	        if (jqXHR.status === 0) {
+    	            msg = 'Not connect.\n Verify Network.';
+    	        } else if (jqXHR.status == 404) {
+    	            msg = 'Requested page not found. [404]';
+    	        } else if (jqXHR.status == 500) {
+    	            msg = 'Internal Server Error [500].';
+    	        } else if (exception === 'parsererror') {
+    	            msg = 'Requested JSON parse failed.';
+    	        } else if (exception === 'timeout') {
+    	            msg = 'Time out error.';
+    	        } else if (exception === 'abort') {
+    	            msg = 'Ajax request aborted.';
+    	        } else {
+    	            msg = 'Uncaught Error.\n' + jqXHR.responseText;
+    	        }
+	       	    
+    	        document.getElementById("InstructorData").innerHTML +=  "</br>" + msg;
+    	    }
+        });
+}
 
 $( document ).ready( function() {
 	
@@ -67,7 +122,7 @@ $( document ).ready( function() {
 	    	
 	    	
 	    	var SelectedHeadquarter = document.getElementById("Headquarters").value;
-	    	document.getElementById("InstructorData").innerHTML = "";
+	    	document.getElementById("InstructorData").innerHTML = "Loading...";
 	    	document.getElementById("DownloadReport").style.display = "none";
 	    	$("#dvData").remove();
 	    	
@@ -78,6 +133,7 @@ $( document ).ready( function() {
 		        	   
 		        	   Sede: SelectedHeadquarter,
 		        	   Report: "Activity",
+		        	   Page: 1,
 		           },
 		           datatype:'text',
 		           success:function(result){
@@ -114,45 +170,8 @@ $( document ).ready( function() {
 		           });
 	    };
 		document.getElementById("DownloadReport").onclick = function(){
-			
-			var SelectedHeadquarter = document.getElementById("Headquarters").value;
-	    	
-			var $table = $('#dvData>table');
-			var $rows = $table.find('tr:has(td)');
-
-			// Temporary delimiter characters unlikely to be typed by keyboard
-			// This is to avoid accidentally splitting the actual contents
-			tmpColDelim = String.fromCharCode(11); // vertical tab character
-			tmpRowDelim = String.fromCharCode(0); // null character
-
-			// actual delimiter characters for CSV format
-			colDelim = '","';
-			rowDelim = '"\r\n"';
-
-			// Grab text from table into CSV formatted string
-			csv = '"' + $rows.map(function (i, row) {
-			    var $row = $(row);
-			        $cols = $row.find('td');
-
-			    return $cols.map(function (j, col) {
-			        var $col = $(col);
-			            text = $col.text();
-
-			        return text.replace(/"/g, '""'); // escape double quotes
-
-			    }).get().join(tmpColDelim);
-
-			}).get().join(tmpRowDelim)
-			    .split(tmpRowDelim).join(rowDelim)
-			    .split(tmpColDelim).join(colDelim) + '"',
-
-			// Data URI
-			csvData = 'data:application/csv;charset=utf-8,' + encodeURIComponent(csv);
-
-			var link = document.createElement("a");
-			link.setAttribute("href", csvData);
-			link.setAttribute("download", "ControlDeDocentes"+ SelectedHeadquarter +".csv");
-			link.click();
+			window.location = "https://aiepclone.blackboard.com/webapps/lnoh-AIEPMTOOL-BBLEARN/app/InstructorsControlReport"+
+			"?Headquarter="+document.getElementById("Headquarters").value;			
 	    };
 });
 
@@ -167,11 +186,7 @@ $( document ).ready( function() {
 			margin-left: 20px;
   			margin-right: 20px;
 		}
-		td, th {
-		  max-width: 500px !important;
-		  word-wrap: break-word !important;
-		  white-space: pre-wrap !important;
-		}
+		
 		.dropdown-menu.pull-right {
 		
 		    margin-top: 0px !important;

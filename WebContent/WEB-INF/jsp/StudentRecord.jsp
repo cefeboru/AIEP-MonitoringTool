@@ -28,7 +28,7 @@
 	          </tr>
 	          <tr>
 	            <td colspan="6" align="center" class="celdaColumna">
-	                <img src="/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/xls.png" style="height: 10%;">&nbsp;<label id="DownloadReport" style="font-size: 110%;font-Weight: bold;cursor: pointer;">Descargar Listado</label>      
+	                <img src="/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/xls.png" style="height: 30px;">&nbsp;<label id="DownloadReport" style="font-size: 110%;font-Weight: bold;cursor: pointer;">Descargar Listado</label>      
 	            </td>
 	          </tr>
 	          </tbody>

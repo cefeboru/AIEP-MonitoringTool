@@ -32,6 +32,9 @@
 					<div id="StudentData">
 						${HTMLStuActivity}
 					</div>
+					<div id="DownloadReport" style="display:block;">
+					<img src="/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/xls.png" style="width: 2%;">&nbsp;<label id="DownloadReport" style="font-size: 84%;font-Weight: bold;cursor: pointer;">Descargar Listado</label>&nbsp;&nbsp;&nbsp;&nbsp;
+					</div>
 				</bbNG:step>
 				<bbNG:stepSubmit showCancelButton= "False"><bbNG:stepSubmitButton id="SubmitButton" label="Submit"></bbNG:stepSubmitButton></bbNG:stepSubmit>
 				
@@ -277,6 +280,11 @@ $( document ).ready( function() {
 	    	},100);
 	    	
 	    }
+		
+		document.getElementById("DownloadReport").onclick = function(){
+			
+			window.location = "https://"+ window.location.hostname +"/webapps/lnoh-AIEPMTOOL-BBLEARN/app/StudentActivityReport?HTMLTable=" + encodeURIComponent(document.getElementById("ReportData").innerHTML);			
+	    };
 });
 
 </script>
