@@ -1,5 +1,5 @@
 <div class="tablePagination">
-	<input id="pageNumber" type="number" value="${currentPage}" min="1" max="${pageNumber}">
+	<input id="pageNumber" type="number" value="${currentPage}" min="1" max="${totalPages}">
 	<label> de ${totalPages} paginas.</label> 
 	<button class="button" onclick="selectPage(pageNumber.value)">Ir</button>
 </div>
