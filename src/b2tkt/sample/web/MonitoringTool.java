@@ -260,9 +260,9 @@ public class MonitoringTool {
 			StringBuilder TableData = new StringBuilder();
 
 			int firstRow = (pageNumber - 1) * pageSize + 1;
-			int lastRow = (pageNumber * pageSize) + 1;
+			int lastRow = (pageNumber * pageSize);
 
-			TableData.append("SELECT * FROM ( SELECT a.*, rownum rowcount FROM (");
+			TableData.append("SELECT * FROM ( SELECT rownum rnum, a.* from (");
 			TableData.append("SELECT US.PK1, US.LASTNAME, US.FIRSTNAME, EXTRACT(year from US.DTCREATED) \"COHORTE\","
 					+ " US.EMAIL, US.LAST_LOGIN_DATE, (systimestamp - US.LAST_LOGIN_DATE) \"Date Diff\" "
 					+ "FROM USERS US ");
@@ -287,8 +287,9 @@ public class MonitoringTool {
 			}
 			TableData.append("AND US.SYSTEM_ROLE = 'N' ");
 			TableData.append("AND US.DATA_SRC_PK1 != 2 ");
-			TableData.append(") a WHERE rownum < " + lastRow + " ) WHERE rowcount >= " + firstRow);
 			TableData.append(" ORDER BY LAST_LOGIN_DATE DESC ");
+			TableData.append(") a ) WHERE rnum BETWEEN "+firstRow+" AND "+lastRow);
+			
 
 
 			String query = TableData.toString();
@@ -379,13 +380,13 @@ public class MonitoringTool {
 
 			while (rSet.next()) {
 
-				StudentIds.add(rSet.getString(1));
-				LastName = rSet.getString(2);
-				FirstName = rSet.getString(3);
-				Cohorte = rSet.getString(4);
+				StudentIds.add(rSet.getString("PK1"));
+				LastName = rSet.getString("LASTNAME");
+				FirstName = rSet.getString("FIRSTNAME");
+				Cohorte = rSet.getString("COHORTE");
 				Email = rSet.getString("EMAIL");
-				LastAccess = rSet.getString(6);
-				Status = rSet.getString(7);
+				LastAccess = rSet.getString("LAST_LOGIN_DATE");
+				Status = rSet.getString("Date Diff");
 
 				if (LastAccess == null) {
 
