@@ -434,9 +434,7 @@
 															"Chk", "")
 															+ ",";
 													Names += (document
-															.getElementById("First"
-																	+ this.id
-																			.replace(
+															.getElementById("First" + this.id.replace(
 																					"Chk",
 																					"")).innerHTML
 															+ " "

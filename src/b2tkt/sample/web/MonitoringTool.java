@@ -395,15 +395,15 @@ public class MonitoringTool {
 				if (Email == null) {
 
 					Email = "No Tiene Email";
-					Contact = "<img id='Management" + rSet.getString(1)
+					Contact = "<img id='Management" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/registra.png' style='height: 85%;'>";
 				} else {
-					Contact = "<input id='Chk" + rSet.getString(1) + "' type='checkbox' name='chk' value='" + Email
-							+ "'><img id='Management" + rSet.getString(1)
+					Contact = "<input id='Chk" + rSet.getString("PK1") + "' type='checkbox' name='chk' value='" + Email
+							+ "'><img id='Management" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/registra.png' style='height: 85%;'>";
 				}
 
-				if (SNoContact.indexOf(rSet.getString(1)) == -1) {
+				if (SNoContact.indexOf(rSet.getString("PK1")) == -1) {
 					
 					ResultSet tempResult = conn.createStatement().executeQuery("SELECT * FROM LNOH_STUDREPORT_SETTINGS");
 					if(tempResult.next()){
@@ -418,44 +418,44 @@ public class MonitoringTool {
 				} else {
 
 					Status = "<img src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/gris.png' style='height: 60%;' alt='NO Volver a Contactar' title='NO Volver a Contactar'>";
-					Contact = "<img id='Management" + rSet.getString(1)
+					Contact = "<img id='Management" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/registra.png' style='height: 85%;'>";
 				}
 
 				if (Status.indexOf("verde") != -1) {
 
-					SentEmail = "<img id='Sent" + rSet.getString(1)
+					SentEmail = "<img id='Sent" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/no.png' style='height: 85%;'>";
-					EmailResponse = "<img id='Response" + rSet.getString(1)
+					EmailResponse = "<img id='Response" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/no.png' style='height: 85%;'>";
 				} else {
 
-					SentEmail = "<img id='Sent" + rSet.getString(1)
+					SentEmail = "<img id='Sent" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/sin.png' style='height: 85%;'>";
-					EmailResponse = "<img id='Response" + rSet.getString(1)
+					EmailResponse = "<img id='Response" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/sin.png' style='height: 85%;'>";
 
-					int pos = SMStudentIds.indexOf(rSet.getString(1));
+					int pos = SMStudentIds.indexOf(rSet.getString("PK1"));
 
 					if (pos != -1) {
 
 						for (int i = pos; i < SMStudentIds.size(); i++) {
 
-							if (SMType.get(i).equals("C") && SMStudentIds.get(i).equals(rSet.getString(1))) {
+							if (SMType.get(i).equals("C") && SMStudentIds.get(i).equals(rSet.getString("PK1"))) {
 
-								SentEmail = "<img id='Sent" + rSet.getString(1)
+								SentEmail = "<img id='Sent" + rSet.getString("PK1")
 										+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/chk.png' style='height: 85%;'>";
 							}
-							if (SMType.get(i).equals("E") && SMStudentIds.get(i).equals(rSet.getString(1))) {
+							if (SMType.get(i).equals("E") && SMStudentIds.get(i).equals(rSet.getString("PK1"))) {
 
-								EmailResponse = "<img id='Response" + rSet.getString(1)
+								EmailResponse = "<img id='Response" + rSet.getString("PK1")
 										+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/chk.png' style='height: 85%;'>";
 							}
 						}
 					}
 				}
 
-				History = "<img id='History" + rSet.getString(1)
+				History = "<img id='History" + rSet.getString("PK1")
 						+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/historial.png' style='height: 85%;'"
 						+ "onclick='studentRecord(this);'>";
 
@@ -767,26 +767,19 @@ public class MonitoringTool {
 			cManager.close();
 
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		} // new BbMail();
 		catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		} catch (ValidationException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		} catch (ConnectionNotAvailableException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		}
 
@@ -892,7 +885,6 @@ public class MonitoringTool {
 			st.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			RESULTS = "Error: " + e.getLocalizedMessage();
 		}
@@ -1002,10 +994,8 @@ public class MonitoringTool {
 			}
 
 		} catch (ConnectionNotAvailableException e) {
-			// TODO Auto-generated catch block
 			HTMLData += "Error: " + e.getLocalizedMessage();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			HTMLData += "Error: " + e.getLocalizedMessage();
 		}
 
@@ -1158,11 +1148,9 @@ public class MonitoringTool {
 			rSet.close();
 
 		} catch (ConnectionNotAvailableException e) {
-			// TODO Auto-generated catch block
 			Results += "Error: " + e.getLocalizedMessage();
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Results += "Error: " + e.getLocalizedMessage();
 		}
@@ -1299,10 +1287,8 @@ public class MonitoringTool {
 			Results = Data.toString();
 
 		} catch (ConnectionNotAvailableException e) {
-			// TODO Auto-generated catch block
 			Results += "Error: " + e.getLocalizedMessage();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			Results += "Error: " + e.getLocalizedMessage();
 		}
 
@@ -1326,7 +1312,7 @@ public class MonitoringTool {
 			conn = cManager.getConnection();
 
 			StringBuilder TableData = new StringBuilder();
-			//TODO ADD COUNT QUERY TO OPTIMIZE LOAD TIME
+
 			TableData.append("SELECT * FROM ( SELECT a.*, rownum rowcount FROM (");
 			TableData.append(
 					"SELECT CM.PK1, CM.COURSE_ID, CM.COURSE_NAME, CONCAT(CONCAT(US.FIRSTNAME,' '),US.LASTNAME) \"DOCENTE\" , CM.START_DATE \"FECHA INICIAL\",CM.END_DATE \"FECHA FINAL\", ");
@@ -5771,8 +5757,6 @@ public class MonitoringTool {
 			estadoVerde = Integer.valueOf(verde == null? "0": verde);
 			estadoAmarillo = Integer.valueOf(amarillo == null ? "0" : amarillo);
 			estadoNaranja = Integer.valueOf(naranja == null ? "0" : naranja);
-			//TODO REMOVE PRINT			
-			System.out.format("Verde: %d , Amarillo: %d, Naranja: %d \n", estadoVerde, estadoAmarillo, estadoNaranja);
 			
 			cManager = BbDatabase.getDefaultInstance().getConnectionManager();
 			conn = cManager.getConnection();
