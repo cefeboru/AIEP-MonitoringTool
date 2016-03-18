@@ -1,5 +1,11 @@
 <head>
 	<script src="/webapps/vtbe-tinymce/tiny_mce/tiny_mce.js?v=9.1.201410.160373-1_11.6.1173427"></script>
+	<style>
+		.EmailMessage {
+			width:100%;
+			height:100vh;
+		}
+	</style>
 </head>
 <body>
 	<textarea id="EmailMessage" >${EmailMessage}</textarea>
@@ -15,4 +21,5 @@
 	    selector: '#EmailMessage'
 	});
 </script>
+
 </body>

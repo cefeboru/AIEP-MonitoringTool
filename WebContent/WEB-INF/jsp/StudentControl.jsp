@@ -467,7 +467,7 @@
 									parametros += "&Ids="+Ids;
 									parametros += "&Names="+Names;
 									parametros += "&Status="+Status;
-									var emailWindow = window.open("SendEmail?"+parametros); 
+									var emailWindow = window.open("SendEmail?"+parametros,'SendEmail','toolbar=no,status=no,menubar=no,scrollbars=no,location=no,width=600,height=450',false); 
 									
 
 // 									jqueryAlias
