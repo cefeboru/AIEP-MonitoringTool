@@ -8,17 +8,17 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="C:/Users/cbonilla/Documents/CNT-Libs/bb-cms-admin-9.1.201404.160205.jar"/>
-	<classpathentry kind="lib" path="C:/Users/cbonilla/Documents/CNT-Libs/bb-platform-9.1.130093.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/cbonilla/Documents/CNT-Libs/bb-taglibs-9.1.130093.0.jar"/>
-	<classpathentry kind="lib" path="C:/Users/cbonilla/Documents/CNT-Libs/java-json.jar"/>
-	<classpathentry kind="lib" path="C:/Users/cbonilla/Documents/CNT-Libs/java-mail-1.4.jar"/>
-	<classpathentry kind="lib" path="C:/Users/cbonilla/Documents/CNT-Libs/javax.servlet.jar"/>
-	<classpathentry kind="lib" path="C:/Users/cbonilla/Documents/CNT-Libs/json-simple-1.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/cbonilla/Documents/CNT-Libs/jsp-api-2.1.jar"/>
-	<classpathentry kind="lib" path="C:/Users/cbonilla/Documents/CNT-Libs/jstl-1.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/cbonilla/Documents/CNT-Libs/slf4j-simple-1.7.7.jar"/>
-	<classpathentry kind="lib" path="C:/Users/cbonilla/Documents/CNT-Libs/log4j.jar"/>
-	<classpathentry kind="lib" path="C:/Users/cbonilla/Documents/CNT-Libs/slf4j-api-1.7.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rnarvaez/Desktop/eclipse/workspace/Blackboard Libs/Other Libs/bb-cms-admin-9.1.201404.160205.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rnarvaez/Desktop/eclipse/workspace/Blackboard Libs/Other Libs/bb-platform-9.1.130093.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rnarvaez/Desktop/eclipse/workspace/Blackboard Libs/Other Libs/bb-taglibs-9.1.130093.0.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rnarvaez/Desktop/eclipse/workspace/Blackboard Libs/Other Libs/java-json.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rnarvaez/Desktop/eclipse/workspace/Blackboard Libs/Other Libs/java-mail-1.4.4.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rnarvaez/Desktop/eclipse/workspace/Blackboard Libs/Other Libs/javax.servlet.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rnarvaez/Desktop/eclipse/workspace/Blackboard Libs/Other Libs/json-simple-1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rnarvaez/Desktop/eclipse/workspace/Blackboard Libs/Other Libs/jsp-api-2.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rnarvaez/Desktop/eclipse/workspace/Blackboard Libs/Other Libs/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rnarvaez/Desktop/eclipse/workspace/Blackboard Libs/Other Libs/log4j.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rnarvaez/Desktop/eclipse/workspace/Blackboard Libs/Other Libs/slf4j-api-1.7.7.jar"/>
+	<classpathentry kind="lib" path="C:/Users/rnarvaez/Desktop/eclipse/workspace/Blackboard Libs/Other Libs/slf4j-simple-1.7.7.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

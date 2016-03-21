@@ -18,8 +18,14 @@
 
 				<bbNG:step id="Sedes" title="Filtros"
 					instructions="Seleccione una Sede">
-						Modalidad: ${HTMLModalidades} Sede: ${HTMLHeadquarters}<input
-						type="button" id="Filter" value="Filtrar">
+						<label>Modalidad:</label> ${HTMLModalidades} &emsp;
+						<label>Sede:</label> ${HTMLHeadquarters} &emsp;
+						<label>Modulo:</label><input type="text" id="Modulo">&emsp;
+						<label>Secci&oacute;n:</label><input type="text" id="Seccion">&emsp;
+						<label>A&ntilde;o:</label><input type="text" id="Anio">&emsp;
+						<label>Semestre:</label><input type="text" id="Semestre">&emsp;
+						<input type="button" id="Filter" value="Filtrar">
+						<br>
 				</bbNG:step>
 	
 	
@@ -86,6 +92,7 @@ $( document ).ready( function() {
 		        	   Sede: SelectedHeadquarter,
 		        	   Report: "Access",
 		        	   Modalidad: SelectedModalidad,
+		        	   CourseFilter: BuildCourseString(),
 		           },
 		           datatype:'text',
 		           success:function(result){
@@ -116,6 +123,39 @@ $( document ).ready( function() {
 		       	    }
 		           });
 	    };
+	    
+	    function BuildCourseString(){
+	    	
+	    	var Modality = document.getElementById("Modalidades").value;
+	    	var Module = document.getElementById("Modulo").value;
+	    	var Section = document.getElementById("Seccion").value;
+	    	var Year = document.getElementById("Anio").value;
+	    	var Semester = document.getElementById("Semestre").value;
+
+	    	var Filters = [Module,Section,Year,Semester,Modality];
+
+	    	var FilterString = "";
+
+	    	Filters.forEach(
+
+	    	function(a){
+
+	    		if(a == ""){
+
+	    			FilterString += "%";
+	    		}
+	    		else{
+
+	    			FilterString += a;	
+	    		}
+
+	    		FilterString += "-";
+	    	});
+
+	    	FilterString = FilterString.substring(0,FilterString.length-1);
+
+	    	return FilterString;
+	    }
 	    
 	    var a = document.getElementById("TableData");
 	    var b = a.parentNode;
