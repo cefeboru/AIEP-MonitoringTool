@@ -18,3 +18,11 @@ ${HTMLTable}
 		padding: 0 15px 0 15px;
 	}
 </style>
+<script>
+	pageNumber.onkeypress = function(e) { 
+		var key_code = e.keyCode;
+		if(key_code == 13){ 
+			selectPage(pageNumber.value) 
+		}
+	}
+</script>
