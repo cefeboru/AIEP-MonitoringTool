@@ -30,7 +30,7 @@
 				<bbNG:stepSubmitButton id="SubmitButton" label="Submit"></bbNG:stepSubmitButton>
 			</bbNG:stepSubmit>
 
-			<bbNG:step id="StudentReport" title="Control de Estudiantes SP"
+			<bbNG:step id="StudentReport" title="Control de Estudiantes"
 				instructions=".">
 				<div id="StudentData"></div>
 
@@ -434,9 +434,7 @@
 															"Chk", "")
 															+ ",";
 													Names += (document
-															.getElementById("First"
-																	+ this.id
-																			.replace(
+															.getElementById("First" + this.id.replace(
 																					"Chk",
 																					"")).innerHTML
 															+ " "
@@ -463,70 +461,13 @@
 											.substring(0, Names.length - 1);
 									Status = Status.substring(0,
 											Status.length - 1);
-
-									jqueryAlias
-											.ajax({
-												type : 'GET',
-												url : 'SendEmail',
-												data : {
-
-													Emails : Emails,
-													Format : SelectedFormat,
-													Ids : Ids,
-													Names : Names,
-													Status : Status
-												},
-												datatype : 'text',
-												success : function(result) {
-
-													jqueryAlias(':checkbox:checked')
-															.each(
-																	function() {
-																		jqueryAlias("#Sent"
-																				+ this.id
-																						.replace(
-																								"Chk",
-																								""))[0].src = "/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/chk.png";
-																	});
-													jqueryAlias(':checkbox:checked')
-															.each(
-																	function() {
-																		this.checked = false;
-																	});
-													alertify
-															.success(
-																	"Se enviaron los correos exitosamente.",
-																	1500);
-												},
-												error : function(jqXHR,
-														exception) {
-
-													var msg = '';
-
-													if (jqXHR.status === 0) {
-														msg = 'Not connect.\n Verify Network.';
-													} else if (jqXHR.status == 404) {
-														msg = 'Requested page not found. [404]';
-													} else if (jqXHR.status == 500) {
-														msg = 'Internal Server Error [500].';
-													} else if (exception === 'parsererror') {
-														msg = 'Requested JSON parse failed.';
-													} else if (exception === 'timeout') {
-														msg = 'Time out error.';
-													} else if (exception === 'abort') {
-														msg = 'Ajax request aborted.';
-													} else {
-														msg = 'Uncaught Error.\n'
-																+ jqXHR.responseText;
-													}
-
-													alertify
-															.error(
-																	"Hubo un error al enviar los correos, intente de nuevo."
-																			+ msg,
-																	2000);
-												}
-											});
+									
+									var parametros = "Emails="+Emails;
+									parametros += "&Format="+SelectedFormat;
+									parametros += "&Ids="+Ids;
+									parametros += "&Names="+Names;
+									parametros += "&Status="+Status;
+									var emailWindow = window.open("SendEmail?"+parametros,'SendEmail','toolbar=no,status=no,menubar=no,scrollbars=no,location=no,width=600,height=450',false); 
 								} else {
 
 									alertify
@@ -672,14 +613,11 @@
 	margin-right: 20px;
 }
 
-/*td, th {
-	max-width: 500px !important;
-	word-wrap: break-word !important;
-	white-space: pre-wrap !important;
-}*/
-
 .dropdown-menu.pull-right {
 	margin-top: 0px !important;
+}
+#StudentData {
+	font-size: 13px;
 }
 
 #StudentData tr, #StudentData td, #StudentData th {

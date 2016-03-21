@@ -267,14 +267,14 @@ public class MonitoringTool {
 					+ " US.EMAIL, US.LAST_LOGIN_DATE, (systimestamp - US.LAST_LOGIN_DATE) \"Date Diff\" "
 					+ "FROM USERS US ");
 
-			if (Headquarter.equals("All") && modalidad.equals("All")) {
+			if (Headquarter.equals("Todo") && modalidad.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
 				TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
 				TableData.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
 				
-			} else if (Headquarter.equals("All")) {
+			} else if (Headquarter.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1=" + modalidad + " ");
-			} else if (modalidad.equals("All")) {
+			} else if (modalidad.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
 				TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
 				TableData.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
@@ -287,7 +287,7 @@ public class MonitoringTool {
 			}
 			TableData.append("AND US.SYSTEM_ROLE = 'N' ");
 			TableData.append("AND US.DATA_SRC_PK1 != 2 ");
-			TableData.append(" ORDER BY LAST_LOGIN_DATE DESC ");
+			TableData.append(" ORDER BY LAST_LOGIN_DATE ASC ");
 			TableData.append(") a ) WHERE rnum BETWEEN "+firstRow+" AND "+lastRow);
 			
 
@@ -395,15 +395,15 @@ public class MonitoringTool {
 				if (Email == null) {
 
 					Email = "No Tiene Email";
-					Contact = "<img id='Management" + rSet.getString(1)
+					Contact = "<img id='Management" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/registra.png' style='height: 85%;'>";
 				} else {
-					Contact = "<input id='Chk" + rSet.getString(1) + "' type='checkbox' name='chk' value='" + Email
-							+ "'><img id='Management" + rSet.getString(1)
+					Contact = "<input id='Chk" + rSet.getString("PK1") + "' type='checkbox' name='chk' value='" + Email
+							+ "'><img id='Management" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/registra.png' style='height: 85%;'>";
 				}
 
-				if (SNoContact.indexOf(rSet.getString(1)) == -1) {
+				if (SNoContact.indexOf(rSet.getString("PK1")) == -1) {
 					
 					ResultSet tempResult = conn.createStatement().executeQuery("SELECT * FROM LNOH_STUDREPORT_SETTINGS");
 					if(tempResult.next()){
@@ -418,44 +418,44 @@ public class MonitoringTool {
 				} else {
 
 					Status = "<img src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/gris.png' style='height: 60%;' alt='NO Volver a Contactar' title='NO Volver a Contactar'>";
-					Contact = "<img id='Management" + rSet.getString(1)
+					Contact = "<img id='Management" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/registra.png' style='height: 85%;'>";
 				}
 
 				if (Status.indexOf("verde") != -1) {
 
-					SentEmail = "<img id='Sent" + rSet.getString(1)
+					SentEmail = "<img id='Sent" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/no.png' style='height: 85%;'>";
-					EmailResponse = "<img id='Response" + rSet.getString(1)
+					EmailResponse = "<img id='Response" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/no.png' style='height: 85%;'>";
 				} else {
 
-					SentEmail = "<img id='Sent" + rSet.getString(1)
+					SentEmail = "<img id='Sent" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/sin.png' style='height: 85%;'>";
-					EmailResponse = "<img id='Response" + rSet.getString(1)
+					EmailResponse = "<img id='Response" + rSet.getString("PK1")
 							+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/sin.png' style='height: 85%;'>";
 
-					int pos = SMStudentIds.indexOf(rSet.getString(1));
+					int pos = SMStudentIds.indexOf(rSet.getString("PK1"));
 
 					if (pos != -1) {
 
 						for (int i = pos; i < SMStudentIds.size(); i++) {
 
-							if (SMType.get(i).equals("C") && SMStudentIds.get(i).equals(rSet.getString(1))) {
+							if (SMType.get(i).equals("C") && SMStudentIds.get(i).equals(rSet.getString("PK1"))) {
 
-								SentEmail = "<img id='Sent" + rSet.getString(1)
+								SentEmail = "<img id='Sent" + rSet.getString("PK1")
 										+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/chk.png' style='height: 85%;'>";
 							}
-							if (SMType.get(i).equals("E") && SMStudentIds.get(i).equals(rSet.getString(1))) {
+							if (SMType.get(i).equals("E") && SMStudentIds.get(i).equals(rSet.getString("PK1"))) {
 
-								EmailResponse = "<img id='Response" + rSet.getString(1)
+								EmailResponse = "<img id='Response" + rSet.getString("PK1")
 										+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/chk.png' style='height: 85%;'>";
 							}
 						}
 					}
 				}
 
-				History = "<img id='History" + rSet.getString(1)
+				History = "<img id='History" + rSet.getString("PK1")
 						+ "' src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/historial.png' style='height: 85%;'"
 						+ "onclick='studentRecord(this);'>";
 
@@ -561,7 +561,7 @@ public class MonitoringTool {
 			ResultSet rSet = selectQuery.executeQuery();
 
 			RESULTS = "<select name='Modalidades' id='Modalidades'>";
-			RESULTS += "<option value='All' selected>All</option>";
+			RESULTS += "<option value='Todo' selected>Todo</option>";
 
 			while (rSet.next()) {
 				String primaryKey = rSet.getString("PK1");
@@ -616,7 +616,7 @@ public class MonitoringTool {
 			ResultSet rSet = selectQuery.executeQuery();
 
 			RESULTS = "<select name='Modalidades' id='Modalidades'>";
-			RESULTS += "<option value='All' selected>All</option>";
+			RESULTS += "<option value='Todo' selected>Todo</option>";
 
 			String Name = "";
 			
@@ -677,7 +677,7 @@ public class MonitoringTool {
 			ResultSet rSet = selectQuery.executeQuery();
 
 			RESULTS = "<select name='Headquarters' id='Headquarters'>";
-			RESULTS += "<option value='All' selected>All</option>";
+			RESULTS += "<option value='Todo' selected>Todo</option>";
 
 			while (rSet.next()) {
 				String value = rSet.getString(1);
@@ -717,30 +717,7 @@ public class MonitoringTool {
 
 		try {
 
-			String FormatText = "";
-			String PlainText = "";
-
-			if (Format.equals("1")) {
-
-				PlainText = "Estimad@ [nombre_estudiante] \r\n \r\nJunto con saludarle y esperando que se encuentre bien, hemos detectado que desde que se iniciaron las clases no tiene conexión en la plataforma Semipresencial y nos interesa saber las razones de su ausencia. \r\nEs muy importante que pueda infórmanos cuál es el motivo de esta situación, de modo de poder asistirle y orientarlo sobre los pasos a seguir para regularizar su situación.\r\n\r\n\r\nAtenta a sus comentarios.\r\n\r\nCarolina Mardones I.\r\nCoordinadora Nacional de Tecnología Educativa\r\nDirección de Tecnologías Educativas\r\nInstituto Profesional AIEP\r\n(56-2) 29022772\r\naiep.cl";
-				FormatText = "<head>\r\n<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />\r\n<title>Documento sin t&iacute;tulo</title>\r\n<style type='text/css'>\r\n<!--\r\n.Estilo1 {\r\n	font-family: Arial, Helvetica, sans-serif;\r\n	font-size: 14px;\r\n	color: #0A75B6;\r\n}\r\n.Estilo2 {\r\n	color: #FF0000;\r\n	font-weight: bold;\r\n}\r\n.Estilo3 {\r\n	font-family: Arial, Helvetica, sans-serif;\r\n	color: #CB1703\r\n	}\r\n.Estilo4 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #0A75B6; font-weight: bold; }\r\n-->\r\n</style>\r\n</head>\r\n\r\n<body>\r\n<div class='Estilo1'><strong>Estimad@</strong> [nombre_estudiante] </div>\r\n<div class='Estilo1'>&nbsp;</div>\r\n<div align='justify' class='Estilo1'>\r\n  <p>Junto con saludarle y esperando que se encuentre bien, hemos detectado que desde que se iniciaron las clases no tiene conexi&oacute;n en la plataforma Semipresencial y nos interesa saber las razones de su ausencia. Es muy importante que pueda informarnos cu&aacute;l es el motivo de esta situaci&oacute;n, de modo de poder asistirle y orientarlo sobre los pasos a seguir para regularizar su situaci&oacute;n.</p>\r\n  <p><br />\r\n    Atenta a sus comentarios.</p>\r\n</div>\r\n<div class='Estilo4'>Carolina Mardones I.<br>\r\nCoordinadora Nacional de Tecnolog&iacute;a Educativa<br>\r\nDirecci&oacute;n de Tecnolog&iacute;as Educativas<br>\r\nInstituto Profesional AIEP<br>\r\n(56-2) 29022772</div>\r\n\r\n <div align='left' class='Estilo2'><a href='http://www.aiep.cl/' target='_blank' class='Estilo3'>aiep.cl</a></div>\r\n</div>\r\n</body>";
-
-			}
-			if (Format.equals("2")) {
-
-				PlainText = "Estimad@ [nombre_estudiante] \r\n \r\nJunto con saludarle y esperando que se encuentre bien, hemos detectado que ya hace una semana no tiene conexión en la plataforma Semipresencial y nos interesa saber las razones de su ausencia; \r\nRecuerda que tu participación semanal es muy importante  dentro de esta modalidad de estudio para poder cumplir con las actividades y fechas establecidas en la plataforma para así poder tener la  asistencia correspondiente a los días sábados\r\n\r\n\r\nAtenta a sus comentarios.\r\n\r\nCarolina Mardones I.\r\nCoordinadora Nacional de Tecnología Educativa\r\nDirección de Tecnologías Educativas\r\nInstituto Profesional AIEP\r\n(56-2) 29022772\r\naiep.cl";
-				FormatText = "<head>\r\n<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />\r\n<title>Documento sin t&iacute;tulo</title>\r\n<style type='text/css'>\r\n<!--\r\n.Estilo1 {\r\n	font-family: Arial, Helvetica, sans-serif;\r\n	font-size: 14px;\r\n	color: #0A75B6;\r\n}\r\n.Estilo2 {\r\n	color: #FF0000;\r\n	font-weight: bold;\r\n}\r\n.Estilo3 {font-family: Arial, Helvetica, sans-serif; color: #CB1703}\r\n.Estilo4 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #0A75B6; font-weight: bold; }\r\n-->\r\n</style>\r\n</head>\r\n\r\n<body>\r\n<div class='Estilo1'><strong>Estimad@</strong> [nombre_estudiante] </div>\r\n<div class='Estilo1'>&nbsp;</div>\r\n\r\n<div align='justify' class='Estilo1'>\r\n  <p>Junto con saludarle y esperando que se encuentre bien, hemos detectado que ya hace una semana&nbsp;no tiene&nbsp;conexi&oacute;n en la plataforma Semipresencial y nos interesa saber las razones de su ausencia; Recuerda que tu participaci&oacute;n semanal es muy importante &nbsp;dentro de esta modalidad de estudio para poder cumplir con las actividades y fechas establecidas en la plataforma para as&iacute; poder tener la &nbsp;asistencia correspondiente a los d&iacute;as s&aacute;bados</p>\r\n  <p><br />\r\n    Atenta a sus comentarios.</p>\r\n</div>\r\n<div class='Estilo4'>Carolina Mardones I.<br>\r\nCoordinadora Nacional de Tecnolog&iacute;a Educativa<br>\r\nDirecci&oacute;n de Tecnolog&iacute;as Educativas<br>\r\nInstituto Profesional AIEP<br>\r\n(56-2) 29022772</div>\r\n\r\n <div align='left' class='Estilo2'><a href='http://www.aiep.cl/' target='_blank' class='Estilo3'>aiep.cl</a></div>\r\n</div>\r\n</body>\r\n";
-			}
-			if (Format.equals("3")) {
-
-				PlainText = "Estimad@ [nombre_estudiante] \r\nJunto con saludarle y esperando que se encuentre bien, hemos detectado que ya hace dos semanas no tienes conexión en la plataforma Semipresencial y nos interesa saber las razones de su ausencia.\r\nEs muy importante que pueda infórmanos cuál es el motivo de esta situación, de modo de poder asistirle y orientarlo sobre los pasos a seguir para regularizar su situación.\r\n\r\n\r\nAtenta a sus comentarios.\r\n\r\nCarolina Mardones I.\r\nCoordinadora Nacional de Tecnología Educativa\r\nDirección de Tecnologías Educativas\r\nInstituto Profesional AIEP\r\n(56-2) 29022772\r\naiep.cl";
-				FormatText = "<head>\r\n<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />\r\n<title>Documento sin t&iacute;tulo</title>\r\n<style type='text/css'>\r\n<!--\r\n.Estilo1 {\r\n	font-family: Arial, Helvetica, sans-serif;\r\n	font-size: 14px;\r\n	color: #0A75B6;\r\n}\r\n.Estilo2 {\r\n	color: #FF0000;\r\n	font-weight: bold;\r\n}\r\n.Estilo3 {font-family: Arial, Helvetica, sans-serif; color: #CB1703}\r\n.Estilo4 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #0A75B6; font-weight: bold; }\r\n-->\r\n</style>\r\n</head>\r\n\r\n<body>\r\n<div class='Estilo1'><strong>Estimad@</strong> [nombre_estudiante] </div>\r\n\r\n<div align='justify' class='Estilo1'>\r\n  <p>Junto con saludarle y esperando que se encuentre bien,  hemos detectado que ya hace dos semanas no tienes conexi&oacute;n en la plataforma Semipresencial y nos interesa saber las razones de su ausencia. Es muy importante que pueda informarnos cu&aacute;l es el motivo de esta situaci&oacute;n, de modo de poder asistirle y orientarlo sobre los pasos a seguir para regularizar su situaci&oacute;n.</p>\r\n\r\n<br />\r\n    Atenta a sus comentarios.</p>\r\n</div>\r\n<div class='Estilo4'>Carolina Mardones I.<br>\r\nCoordinadora Nacional de Tecnolog&iacute;a Educativa<br>\r\nDirecci&oacute;n de Tecnolog&iacute;as Educativas<br>\r\nInstituto Profesional AIEP<br>\r\n(56-2) 29022772</div>\r\n\r\n <div align='left' class='Estilo2'><a href='http://www.aiep.cl/' target='_blank' class='Estilo3'>aiep.cl</a></div>\r\n</div>\r\n</body>\r\n";
-			}
-			if (Format.equals("4")) {
-
-				PlainText = "Estimad@ [nombre_estudiante] \r\nBienvenido a AIEP!\r\n\r\n Junto con saludarte, queremos aprovechar esta instancia para darte las primeras informaciones respecto de las actividades e inicio de clases del periodo académico.\r\n\r\nTe comentamos que recibirás un correo con tu usuario y contraseÃ±a para ingresar a la plataforma Semipresencial, la cual se encuentra en la dirección http://semipresencial.aiep.cl\r\nCon estos mismos datos podrás acceder a tu intranet académica, en donde podrás acceder a información institucional y a tu cuenta de correo electrónico AIEP. \r\nRevisa el sitio http://www.aiep.cl para ingresar a tu intranet o hazlo directamente en http://intranet.aiep.cl\r\n\r\nPara más información de uso de la plataforma Semipresencial visita : http://semipresencial.aiep.cl/pluginfile.php/7764/block_html/content/carta_bienvenida_estudiantes.pdf\r\n\r\n\r\nPor favor, confirma la recepción de este correo e indicamos si necesitas cambiar tu correo de contacto. Es muy importante asegurar canales de comunicación efectivos.\r\n\r\nEn caso de requerir ayuda sobre el uso de la plataforma o realizar consultas en general puedes enviar tus solicitudes a:\r\n\r\nCorreo de la modalidad : online@aiep.cl\r\nMesa de Ayuda : http://soporte.aiep.cl\r\n\r\nNos contactaremos contigo a la brevedad\r\n\r\n\r\nDirección de Tecnologías Educativas\r\nDirección Nacional de Desarrollo Académico\r\nVicerrectoría Académica \r\nInstituto Profesional AIEP";
-				FormatText = "<head>\r\n<meta http-equiv='Content-Type' content='text/html; charset=iso-8859-1' />\r\n<title>Documento sin t&iacute;tulo</title>\r\n<style type='text/css'>\r\n<!--\r\n.Estilo1 {\r\n	font-family: Arial, Helvetica, sans-serif;\r\n	font-size: 14px;\r\n	color: #0A75B6;\r\n	text-align: justify;\r\n}\r\n.Estilo2 {\r\n	color: #FF0000;\r\n	font-weight: bold;\r\n}\r\n.Estilo3 {\r\n	font-family: Arial, Helvetica, sans-serif;\r\n	color: #CB1703\r\n	}\r\n.Estilo4 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #0A75B6; font-weight: bold; }\r\n-->\r\n</style>\r\n</head>\r\n\r\n<body>\r\n<div class='Estilo1'><strong>Estimad@</strong> [nombre_estudiante] </div>\r\n<div class='Estilo1'></div>\r\n<div align='justify' class='Estilo1'>\r\n  <p>Bienvenido a la modalidad PEV Semipresencial</p>\r\n  <p>Junto con saludarte, queremos aprovechar esta instancia para darte las primeras informaciones respecto de las actividades e inicio de clases del periodo acad&eacute;mico.</p>\r\n  <p>Te comentamos que  recibir&aacute;s un correo con tu usuario y contrase&ntilde;a para ingresar a la plataforma Semipresencial, la cual se encuentra en la direcci&oacute;n <a href='http://semipresencial.aiep.cl'>http://semipresencial.aiep.cl</a></p>\r\n  <p>    Con estos mismos datos podr&aacute;s acceder a tu intranet acad&eacute;mica, en donde podr&aacute;s acceder a informaci&oacute;n institucional y a tu cuenta de correo electr&oacute;nico AIEP. <br>\r\n    Revisa el sitio <a href='http://www.aiep.cl'>http://www.aiep.cl</a> para ingresar a tu intranet o hazlo directamente en <a href='http://intranet.aiep.cl'>http://intranet.aiep.cl</a> </p>\r\n  <p>Para m&aacute;s informaci&oacute;n visita : <a href='http://semipresencial.aiep.cl/pluginfile.php/7764/block_html/content/carta_bienvenida_estudiantes.pdf'>http://semipresencial.aiep.cl/pluginfile.php/7764/block_html/content/carta_bienvenida_estudiantes.pdf</a></p>\r\n  <p><br>\r\n    Por favor, confirma la recepci&oacute;n de este correo e indicamos si necesitas cambiar tu correo de contacto. Es muy importante asegurar canales de comunicaci&oacute;n efectivos.</p>\r\n  <p>En caso de requerir ayuda sobre el uso de la plataforma o realizar consultas en general  puedes enviar tus solicitudes a:<br>\r\n    Correo de la modalidad : semipresencial@aiep.cl<br>\r\n  Mesa de Ayuda :  http://soporte.aiep.cl</p>\r\n  <p>Nos contactaremos contigo a la brevedad<br>\r\n  </p>\r\n</div>\r\n<div class='Estilo4'>Direcci&oacute;n de Tecnolog&iacute;as Educativas<br>\r\n  Direcci&oacute;n Nacional de Desarrollo Acad&eacute;mico<br>\r\n  Vicerrector&iacute;a Acad&eacute;mica <br>\r\nInstituto Profesional AIEP</div>\r\n</div>\r\n</body>";
-			}
+			String FormatText = Format;
 
 			mail = BbMail.class.newInstance();
 
@@ -760,33 +737,26 @@ public class MonitoringTool {
 				Format = Status[i];
 
 				Results += RegisterManagement(Ids[i], "", Format, "EMAIL",
-						PlainText.replace("[nombre_estudiante]", Names[i]), "C", " ", "Automatic", conn, "false");
+						FormatText.replace("[nombre_estudiante]", Names[i]), "C", " ", "Automatic", conn, "false");
 			}
 
 			conn.close();
 			cManager.close();
 
 		} catch (InstantiationException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		} catch (IllegalAccessException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		} // new BbMail();
 		catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		} catch (MessagingException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		} catch (ValidationException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		} catch (ConnectionNotAvailableException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			Results += e.getMessage() + "<br>";
 		}
 
@@ -832,7 +802,7 @@ public class MonitoringTool {
 					motive = "<img src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/rojo.png' style='height: 35%;' alt='Nunca Conectado' title='Nunca Conectado'>â€‹"
 							+ motive;
 				}
-				if (motive.equals("Conectado durante la Ãºltima semana")) {
+				if (motive.equals("Conectado durante la Última semana")) {
 
 					motive = "<label id='StatusText'>" + motive + "</label>";
 					motive = "<img src='/webapps/lnoh-AIEPMTOOL-BBLEARN/Images/verde.png' style='height: 35%;' alt='Conectado durante la Ãºltima semana' title='Conectado durante la Ãºltima semana'>â€‹"
@@ -892,7 +862,6 @@ public class MonitoringTool {
 			st.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			RESULTS = "Error: " + e.getLocalizedMessage();
 		}
@@ -1002,10 +971,8 @@ public class MonitoringTool {
 			}
 
 		} catch (ConnectionNotAvailableException e) {
-			// TODO Auto-generated catch block
 			HTMLData += "Error: " + e.getLocalizedMessage();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			HTMLData += "Error: " + e.getLocalizedMessage();
 		}
 
@@ -1045,14 +1012,14 @@ public class MonitoringTool {
 					+ " US.EMAIL, US.B_PHONE_1, US.LAST_LOGIN_DATE, (systimestamp - US.LAST_LOGIN_DATE) \"Date Diff\" "
 					+ "FROM USERS US ");
 
-			if (Headquarter.equals("All") && modalidad.equals("All")) {
+			if (Headquarter.equals("Todo") && modalidad.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
 				TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
 				TableData.append("WHERE ROLE_NAME IN('Online','Semipresencial','Presencial')) ");
 				
-			} else if (Headquarter.equals("All")) {
+			} else if (Headquarter.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1=" + modalidad + " ");
-			} else if (modalidad.equals("All")) {
+			} else if (modalidad.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
 				TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
 				TableData.append("WHERE ROLE_NAME IN('Online','Semipresencial','Presencial')) ");
@@ -1158,11 +1125,9 @@ public class MonitoringTool {
 			rSet.close();
 
 		} catch (ConnectionNotAvailableException e) {
-			// TODO Auto-generated catch block
 			Results += "Error: " + e.getLocalizedMessage();
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			Results += "Error: " + e.getLocalizedMessage();
 		}
@@ -1299,10 +1264,8 @@ public class MonitoringTool {
 			Results = Data.toString();
 
 		} catch (ConnectionNotAvailableException e) {
-			// TODO Auto-generated catch block
 			Results += "Error: " + e.getLocalizedMessage();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			Results += "Error: " + e.getLocalizedMessage();
 		}
 
@@ -1326,7 +1289,7 @@ public class MonitoringTool {
 			conn = cManager.getConnection();
 
 			StringBuilder TableData = new StringBuilder();
-			//TODO ADD COUNT QUERY TO OPTIMIZE LOAD TIME
+
 			TableData.append("SELECT * FROM ( SELECT a.*, rownum rowcount FROM (");
 			TableData.append(
 					"SELECT CM.PK1, CM.COURSE_ID, CM.COURSE_NAME, CONCAT(CONCAT(US.FIRSTNAME,' '),US.LASTNAME) \"DOCENTE\" , CM.START_DATE \"FECHA INICIAL\",CM.END_DATE \"FECHA FINAL\", ");
@@ -2692,7 +2655,7 @@ public class MonitoringTool {
 			TableData.append("		INNER JOIN INSTITUTION_ROLES IR ON US.INSTITUTION_ROLES_PK1 = IR.PK1");
 			TableData.append("		WHERE CU.ROLE = 'Docente'");
 			TableData.append("		AND CM.ROW_STATUS = 0");
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -3143,12 +3106,12 @@ public class MonitoringTool {
 			TableData.append("WHERE CU.ROLE = 'Docente' ");
 			TableData.append("AND CM.ROW_STATUS = 0 ");
 			
-			if (!modalidad.equals("All")){
+			if (!modalidad.equals("Todo")){
 				
 				TableData.append("AND CM.COURSE_ID LIKE '%-"+ modalidad +"'");
 			}
 
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -3518,12 +3481,12 @@ public class MonitoringTool {
 			TableData.append("WHERE CU.ROLE = 'Docente' ");
 			TableData.append("AND CM.ROW_STATUS = 0 ");
 			
-			if (!modalidad.equals("All")){
+			if (!modalidad.equals("Todo")){
 				
 				TableData.append("AND CM.COURSE_ID LIKE '%-"+ modalidad +"'");
 			}
 
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -3932,12 +3895,12 @@ public class MonitoringTool {
 			TableData.append("WHERE CU.ROLE = 'Docente' ");
 			TableData.append("AND CM.ROW_STATUS = 0 ");
 			
-			if (!modalidad.equals("All")){
+			if (!modalidad.equals("Todo")){
 				
 				TableData.append("AND CM.COURSE_ID LIKE '%-"+ modalidad +"'");
 			}
 
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -4202,12 +4165,12 @@ public class MonitoringTool {
 			TableData.append("WHERE CU.ROLE = 'Docente' ");
 			TableData.append("AND CM.ROW_STATUS = 0 ");
 			
-			if (!modalidad.equals("All")){
+			if (!modalidad.equals("Todo")){
 				
 				TableData.append("AND CM.COURSE_ID LIKE '%-"+ modalidad +"'");
 			}
 
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -4396,7 +4359,7 @@ public class MonitoringTool {
 			TableData.append("		INNER JOIN INSTITUTION_ROLES IR ON US.INSTITUTION_ROLES_PK1 = IR.PK1");
 			TableData.append("		WHERE CU.ROLE = 'Docente'");
 			TableData.append("		AND CM.ROW_STATUS = 0");
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -4799,14 +4762,14 @@ public class MonitoringTool {
 					+ " US.EMAIL, US.LAST_LOGIN_DATE, (systimestamp - US.LAST_LOGIN_DATE) \"Date Diff\" "
 					+ "FROM USERS US ");
 
-			if (Headquarter.equals("All") && modalidad.equals("All")) {
+			if (Headquarter.equals("Todo") && modalidad.equals("Todo")) {
 				tableDataCount.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
 				tableDataCount.append("SELECT PK1 FROM INSTITUTION_ROLES ");
 				tableDataCount.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
 				
-			} else if (Headquarter.equals("All")) {
+			} else if (Headquarter.equals("Todo")) {
 				tableDataCount.append("WHERE US.INSTITUTION_ROLES_PK1=" + modalidad + " ");
-			} else if (modalidad.equals("All")) {
+			} else if (modalidad.equals("Todo")) {
 				tableDataCount.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
 				tableDataCount.append("SELECT PK1 FROM INSTITUTION_ROLES ");
 				tableDataCount.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
@@ -4968,7 +4931,7 @@ public class MonitoringTool {
 			TableData.append("		INNER JOIN INSTITUTION_ROLES IR ON US.INSTITUTION_ROLES_PK1 = IR.PK1");
 			TableData.append("		WHERE CU.ROLE = 'Docente'");
 			TableData.append("		AND CM.ROW_STATUS = 0");
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -5065,12 +5028,12 @@ public class MonitoringTool {
 			TableData.append("WHERE CU.ROLE = 'Docente' ");
 			TableData.append("AND CM.ROW_STATUS = 0 ");
 			
-			if (!modalidad.equals("All")){
+			if (!modalidad.equals("Todo")){
 				
 				TableData.append("AND CM.COURSE_ID LIKE '%-"+ modalidad +"'");
 			}
 			
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -5145,7 +5108,7 @@ public class MonitoringTool {
 
 			String HTMLHeadquarters = this.getHeadquarters();
 			String HTMLModalidades = getModalidades();
-			String ReportName = "Control de Estudiantes SP";
+			String ReportName = "Control de Estudiantes";
 
 			model.addAttribute("HTMLHeadquarters", HTMLHeadquarters);
 			model.addAttribute("HTMLModalidades", HTMLModalidades);
@@ -5205,29 +5168,75 @@ public class MonitoringTool {
 			Context ctx = ContextManagerFactory.getInstance().getContext();
 			ContextManagerFactory.getInstance().setContext(request);
 
-			String[] Emails = request.getParameter("Emails").split(",");
-			String[] Ids = request.getParameter("Ids").split(",");
-			String[] Names = request.getParameter("Names").split(",");
-			String[] Status = request.getParameter("Status").split(",");
+			String Emails = request.getParameter("Emails");
+			String Ids = request.getParameter("Ids");
+			String Names = request.getParameter("Names");
+			String Status = request.getParameter("Status");
 			String Format = request.getParameter("Format");
+			
+			String FormatText = "";
+			
+			if (Format.equals("1")) {
 
-			String Response = "You Selected an invalid option";
+				//PlainText = "Estimad@ [nombre_estudiante] \r\n \r\nJunto con saludarle y esperando que se encuentre bien, hemos detectado que desde que se iniciaron las clases no tiene conexión en la plataforma Semipresencial y nos interesa saber las razones de su ausencia. \r\nEs muy importante que pueda infórmanos cuál es el motivo de esta situación, de modo de poder asistirle y orientarlo sobre los pasos a seguir para regularizar su situación.\r\n\r\n\r\nAtenta a sus comentarios.\r\n\r\nCarolina Mardones I.\r\nCoordinadora Nacional de Tecnología Educativa\r\nDirección de Tecnologías Educativas\r\nInstituto Profesional AIEP\r\n(56-2) 29022772\r\naiep.cl";
+				FormatText = "<head>\r\n<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />\r\n<title>Documento sin t&iacute;tulo</title>\r\n<style type='text/css'>\r\n<!--\r\n.Estilo1 {\r\n	font-family: Arial, Helvetica, sans-serif;\r\n	font-size: 14px;\r\n	color: #0A75B6;\r\n}\r\n.Estilo2 {\r\n	color: #FF0000;\r\n	font-weight: bold;\r\n}\r\n.Estilo3 {\r\n	font-family: Arial, Helvetica, sans-serif;\r\n	color: #CB1703\r\n	}\r\n.Estilo4 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #0A75B6; font-weight: bold; }\r\n-->\r\n</style>\r\n</head>\r\n\r\n<body>\r\n<div class='Estilo1'><strong>Estimad@</strong> [nombre_estudiante] </div>\r\n<div class='Estilo1'>&nbsp;</div>\r\n<div align='justify' class='Estilo1'>\r\n  <p>Junto con saludarle y esperando que se encuentre bien, hemos detectado que desde que se iniciaron las clases no tiene conexi&oacute;n en la plataforma Semipresencial y nos interesa saber las razones de su ausencia. Es muy importante que pueda informarnos cu&aacute;l es el motivo de esta situaci&oacute;n, de modo de poder asistirle y orientarlo sobre los pasos a seguir para regularizar su situaci&oacute;n.</p>\r\n  <p><br />\r\n    Atenta a sus comentarios.</p>\r\n</div>\r\n<div class='Estilo4'>Carolina Mardones I.<br>\r\nCoordinadora Nacional de Tecnolog&iacute;a Educativa<br>\r\nDirecci&oacute;n de Tecnolog&iacute;as Educativas<br>\r\nInstituto Profesional AIEP<br>\r\n(56-2) 29022772</div>\r\n\r\n <div align='left' class='Estilo2'><a href='http://www.aiep.cl/' target='_blank' class='Estilo3'>aiep.cl</a></div>\r\n</div>\r\n</body>";
 
-			if (Emails != null && Format != null) {
+			}
+			if (Format.equals("2")) {
 
-				if (Emails.length > 0) {
+				//PlainText = "Estimad@ [nombre_estudiante] \r\n \r\nJunto con saludarle y esperando que se encuentre bien, hemos detectado que ya hace una semana no tiene conexión en la plataforma Semipresencial y nos interesa saber las razones de su ausencia; \r\nRecuerda que tu participación semanal es muy importante  dentro de esta modalidad de estudio para poder cumplir con las actividades y fechas establecidas en la plataforma para así poder tener la  asistencia correspondiente a los días sábados\r\n\r\n\r\nAtenta a sus comentarios.\r\n\r\nCarolina Mardones I.\r\nCoordinadora Nacional de Tecnología Educativa\r\nDirección de Tecnologías Educativas\r\nInstituto Profesional AIEP\r\n(56-2) 29022772\r\naiep.cl";
+				FormatText = "<head>\r\n<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />\r\n<title>Documento sin t&iacute;tulo</title>\r\n<style type='text/css'>\r\n<!--\r\n.Estilo1 {\r\n	font-family: Arial, Helvetica, sans-serif;\r\n	font-size: 14px;\r\n	color: #0A75B6;\r\n}\r\n.Estilo2 {\r\n	color: #FF0000;\r\n	font-weight: bold;\r\n}\r\n.Estilo3 {font-family: Arial, Helvetica, sans-serif; color: #CB1703}\r\n.Estilo4 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #0A75B6; font-weight: bold; }\r\n-->\r\n</style>\r\n</head>\r\n\r\n<body>\r\n<div class='Estilo1'><strong>Estimad@</strong> [nombre_estudiante] </div>\r\n<div class='Estilo1'>&nbsp;</div>\r\n\r\n<div align='justify' class='Estilo1'>\r\n  <p>Junto con saludarle y esperando que se encuentre bien, hemos detectado que ya hace una semana&nbsp;no tiene&nbsp;conexi&oacute;n en la plataforma Semipresencial y nos interesa saber las razones de su ausencia; Recuerda que tu participaci&oacute;n semanal es muy importante &nbsp;dentro de esta modalidad de estudio para poder cumplir con las actividades y fechas establecidas en la plataforma para as&iacute; poder tener la &nbsp;asistencia correspondiente a los d&iacute;as s&aacute;bados</p>\r\n  <p><br />\r\n    Atenta a sus comentarios.</p>\r\n</div>\r\n<div class='Estilo4'>Carolina Mardones I.<br>\r\nCoordinadora Nacional de Tecnolog&iacute;a Educativa<br>\r\nDirecci&oacute;n de Tecnolog&iacute;as Educativas<br>\r\nInstituto Profesional AIEP<br>\r\n(56-2) 29022772</div>\r\n\r\n <div align='left' class='Estilo2'><a href='http://www.aiep.cl/' target='_blank' class='Estilo3'>aiep.cl</a></div>\r\n</div>\r\n</body>\r\n";
+			}
+			if (Format.equals("3")) {
 
-					Response = SendEmailtoStudents(Emails, Format, Names, Ids, Status);
-				}
+				//PlainText = "Estimad@ [nombre_estudiante] \r\nJunto con saludarle y esperando que se encuentre bien, hemos detectado que ya hace dos semanas no tienes conexión en la plataforma Semipresencial y nos interesa saber las razones de su ausencia.\r\nEs muy importante que pueda infórmanos cuál es el motivo de esta situación, de modo de poder asistirle y orientarlo sobre los pasos a seguir para regularizar su situación.\r\n\r\n\r\nAtenta a sus comentarios.\r\n\r\nCarolina Mardones I.\r\nCoordinadora Nacional de Tecnología Educativa\r\nDirección de Tecnologías Educativas\r\nInstituto Profesional AIEP\r\n(56-2) 29022772\r\naiep.cl";
+				FormatText = "<head>\r\n<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />\r\n<title>Documento sin t&iacute;tulo</title>\r\n<style type='text/css'>\r\n<!--\r\n.Estilo1 {\r\n	font-family: Arial, Helvetica, sans-serif;\r\n	font-size: 14px;\r\n	color: #0A75B6;\r\n}\r\n.Estilo2 {\r\n	color: #FF0000;\r\n	font-weight: bold;\r\n}\r\n.Estilo3 {font-family: Arial, Helvetica, sans-serif; color: #CB1703}\r\n.Estilo4 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #0A75B6; font-weight: bold; }\r\n-->\r\n</style>\r\n</head>\r\n\r\n<body>\r\n<div class='Estilo1'><strong>Estimad@</strong> [nombre_estudiante] </div>\r\n\r\n<div align='justify' class='Estilo1'>\r\n  <p>Junto con saludarle y esperando que se encuentre bien,  hemos detectado que ya hace dos semanas no tienes conexi&oacute;n en la plataforma Semipresencial y nos interesa saber las razones de su ausencia. Es muy importante que pueda informarnos cu&aacute;l es el motivo de esta situaci&oacute;n, de modo de poder asistirle y orientarlo sobre los pasos a seguir para regularizar su situaci&oacute;n.</p>\r\n\r\n<br />\r\n    Atenta a sus comentarios.</p>\r\n</div>\r\n<div class='Estilo4'>Carolina Mardones I.<br>\r\nCoordinadora Nacional de Tecnolog&iacute;a Educativa<br>\r\nDirecci&oacute;n de Tecnolog&iacute;as Educativas<br>\r\nInstituto Profesional AIEP<br>\r\n(56-2) 29022772</div>\r\n\r\n <div align='left' class='Estilo2'><a href='http://www.aiep.cl/' target='_blank' class='Estilo3'>aiep.cl</a></div>\r\n</div>\r\n</body>\r\n";
+			}
+			if (Format.equals("4")) {
+
+				//PlainText = "Estimad@ [nombre_estudiante] \r\nBienvenido a AIEP!\r\n\r\n Junto con saludarte, queremos aprovechar esta instancia para darte las primeras informaciones respecto de las actividades e inicio de clases del periodo académico.\r\n\r\nTe comentamos que recibirás un correo con tu usuario y contraseÃ±a para ingresar a la plataforma Semipresencial, la cual se encuentra en la dirección http://semipresencial.aiep.cl\r\nCon estos mismos datos podrás acceder a tu intranet académica, en donde podrás acceder a información institucional y a tu cuenta de correo electrónico AIEP. \r\nRevisa el sitio http://www.aiep.cl para ingresar a tu intranet o hazlo directamente en http://intranet.aiep.cl\r\n\r\nPara más información de uso de la plataforma Semipresencial visita : http://semipresencial.aiep.cl/pluginfile.php/7764/block_html/content/carta_bienvenida_estudiantes.pdf\r\n\r\n\r\nPor favor, confirma la recepción de este correo e indicamos si necesitas cambiar tu correo de contacto. Es muy importante asegurar canales de comunicación efectivos.\r\n\r\nEn caso de requerir ayuda sobre el uso de la plataforma o realizar consultas en general puedes enviar tus solicitudes a:\r\n\r\nCorreo de la modalidad : online@aiep.cl\r\nMesa de Ayuda : http://soporte.aiep.cl\r\n\r\nNos contactaremos contigo a la brevedad\r\n\r\n\r\nDirección de Tecnologías Educativas\r\nDirección Nacional de Desarrollo Académico\r\nVicerrectoría Académica \r\nInstituto Profesional AIEP";
+				FormatText = "<head>\r\n<meta http-equiv='Content-Type' content='text/html; charset=UTF-8' />\r\n<title>Documento sin t&iacute;tulo</title>\r\n<style type='text/css'>\r\n<!--\r\n.Estilo1 {\r\n	font-family: Arial, Helvetica, sans-serif;\r\n	font-size: 14px;\r\n	color: #0A75B6;\r\n	text-align: justify;\r\n}\r\n.Estilo2 {\r\n	color: #FF0000;\r\n	font-weight: bold;\r\n}\r\n.Estilo3 {\r\n	font-family: Arial, Helvetica, sans-serif;\r\n	color: #CB1703\r\n	}\r\n.Estilo4 {font-family: Arial, Helvetica, sans-serif; font-size: 14px; color: #0A75B6; font-weight: bold; }\r\n-->\r\n</style>\r\n</head>\r\n\r\n<body>\r\n<div class='Estilo1'><strong>Estimad@</strong> [nombre_estudiante] </div>\r\n<div class='Estilo1'></div>\r\n<div align='justify' class='Estilo1'>\r\n  <p>Bienvenido a la modalidad PEV Semipresencial</p>\r\n  <p>Junto con saludarte, queremos aprovechar esta instancia para darte las primeras informaciones respecto de las actividades e inicio de clases del periodo acad&eacute;mico.</p>\r\n  <p>Te comentamos que  recibir&aacute;s un correo con tu usuario y contrase&ntilde;a para ingresar a la plataforma Semipresencial, la cual se encuentra en la direcci&oacute;n <a href='http://semipresencial.aiep.cl'>http://semipresencial.aiep.cl</a></p>\r\n  <p>    Con estos mismos datos podr&aacute;s acceder a tu intranet acad&eacute;mica, en donde podr&aacute;s acceder a informaci&oacute;n institucional y a tu cuenta de correo electr&oacute;nico AIEP. <br>\r\n    Revisa el sitio <a href='http://www.aiep.cl'>http://www.aiep.cl</a> para ingresar a tu intranet o hazlo directamente en <a href='http://intranet.aiep.cl'>http://intranet.aiep.cl</a> </p>\r\n  <p>Para m&aacute;s informaci&oacute;n visita : <a href='http://semipresencial.aiep.cl/pluginfile.php/7764/block_html/content/carta_bienvenida_estudiantes.pdf'>http://semipresencial.aiep.cl/pluginfile.php/7764/block_html/content/carta_bienvenida_estudiantes.pdf</a></p>\r\n  <p><br>\r\n    Por favor, confirma la recepci&oacute;n de este correo e indicamos si necesitas cambiar tu correo de contacto. Es muy importante asegurar canales de comunicaci&oacute;n efectivos.</p>\r\n  <p>En caso de requerir ayuda sobre el uso de la plataforma o realizar consultas en general  puedes enviar tus solicitudes a:<br>\r\n    Correo de la modalidad : semipresencial@aiep.cl<br>\r\n  Mesa de Ayuda :  http://soporte.aiep.cl</p>\r\n  <p>Nos contactaremos contigo a la brevedad<br>\r\n  </p>\r\n</div>\r\n<div class='Estilo4'>Direcci&oacute;n de Tecnolog&iacute;as Educativas<br>\r\n  Direcci&oacute;n Nacional de Desarrollo Acad&eacute;mico<br>\r\n  Vicerrector&iacute;a Acad&eacute;mica <br>\r\nInstituto Profesional AIEP</div>\r\n</div>\r\n</body>";
 			}
 
-			model.addAttribute("Response", Response);
+			model.addAttribute("EmailMessage", FormatText);
+			model.addAttribute("Emails", Emails);
+			model.addAttribute("Ids", Ids);
+			model.addAttribute("Names", Names);
+			model.addAttribute("Status", Status);
 
 		} catch (Exception e) {
 
 			e.printStackTrace();
 		}
 
+		return "SendEmail";
+	}
+	
+	@RequestMapping(value = { "SendEmail" }, method = RequestMethod.POST)
+	public String PostSendEmail(HttpServletRequest request, HttpServletResponse response, final ModelMap model)
+			throws UnsupportedEncodingException, PersistenceException, IOException {
+
+			Context ctx = ContextManagerFactory.getInstance().getContext();
+			ContextManagerFactory.getInstance().setContext(request);
+
+			String[] Emails = request.getParameter("Emails").split(",");
+			String[] Ids = request.getParameter("Ids").split(",");
+			String[] Names = request.getParameter("Names").split(",");
+			String[] Status = request.getParameter("Status").split(",");
+			String Message = request.getParameter("EmailMessage");
+			
+			
+			String Response = "You Selected an invalid option";
+
+			if (Emails != null && Message != null) {
+
+				if (Emails.length > 0) {
+
+					Response = SendEmailtoStudents(Emails, Message, Names, Ids, Status);
+				}
+			}
+
+		model.addAttribute("Method", "POST");
 		return "SendEmail";
 	}
 
@@ -5426,7 +5435,7 @@ public class MonitoringTool {
 			String pageString = request.getParameter("page");
 			int page = (pageString.isEmpty() ? 1 : Integer.valueOf(pageString));
 			String HTMLCourses = getCourses(page);
-			String ReportName = "Seguimiento Curso SP";
+			String ReportName = "Seguimiento Curso";
 
 			model.addAttribute("ReportName", ReportName);
 			model.addAttribute("HTMLCourses", HTMLCourses);
@@ -5454,7 +5463,7 @@ public class MonitoringTool {
 			String Status = request.getParameter("Status");
 
 			String HTMLStuActivity = getStudentActivity(Id);
-			String ReportName = "Control de Actividad de Estudiantes SP";
+			String ReportName = "Control de Actividad de Estudiantes";
 
 			model.addAttribute("Id", Id);
 			model.addAttribute("Name", Name);
@@ -5482,7 +5491,7 @@ public class MonitoringTool {
 
 			//String HTMLHeadquarters = getModalidades();
 			String HTMLHeadquarters = this.getHeadquarters();
-			String ReportName = "Control de Docentes SP";
+			String ReportName = "Control de Docentes";
 
 			model.addAttribute("HTMLHeadquarters", HTMLHeadquarters);
 			model.addAttribute("ReportName", ReportName);
@@ -5740,8 +5749,6 @@ public class MonitoringTool {
 			estadoVerde = Integer.valueOf(verde == null? "0": verde);
 			estadoAmarillo = Integer.valueOf(amarillo == null ? "0" : amarillo);
 			estadoNaranja = Integer.valueOf(naranja == null ? "0" : naranja);
-			//TODO REMOVE PRINT			
-			System.out.format("Verde: %d , Amarillo: %d, Naranja: %d \n", estadoVerde, estadoAmarillo, estadoNaranja);
 			
 			cManager = BbDatabase.getDefaultInstance().getConnectionManager();
 			conn = cManager.getConnection();

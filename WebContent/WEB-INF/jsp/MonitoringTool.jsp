@@ -17,13 +17,13 @@
 			<bbNG:dataCollection>
 				<bbNG:step title="Options" instructions= "Seleccione un reporte para visualizar.">
 					<bbNG:dataElement label = "Option 1">
-						<a target='_blank' href="/webapps/lnoh-AIEPMTOOL-BBLEARN/app/StudentControl">Control de Estudiantes SP</a>
+						<a target='_blank' href="/webapps/lnoh-AIEPMTOOL-BBLEARN/app/StudentControl">Control de Estudiantes</a>
 					</bbNG:dataElement>
 					<bbNG:dataElement label = "Option 2">
 						<a target='_blank' href="/webapps/lnoh-AIEPMTOOL-BBLEARN/app/CourseControl?page=1">Control de Actividad de Estudiantes</a>
 					</bbNG:dataElement>
 					<bbNG:dataElement label = "Option 3">
-						<a target='_blank' href="/webapps/lnoh-AIEPMTOOL-BBLEARN/app/InstructorControl">Control de Docentes SP</a>
+						<a target='_blank' href="/webapps/lnoh-AIEPMTOOL-BBLEARN/app/InstructorControl">Control de Docentes</a>
 					</bbNG:dataElement>
 					<bbNG:dataElement label = "Option 4">
 						<a target='_blank' href="/webapps/lnoh-AIEPMTOOL-BBLEARN/app/InstructorAccess">Control de Acceso de Docentes</a>
