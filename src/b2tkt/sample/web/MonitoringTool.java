@@ -267,14 +267,14 @@ public class MonitoringTool {
 					+ " US.EMAIL, US.LAST_LOGIN_DATE, (systimestamp - US.LAST_LOGIN_DATE) \"Date Diff\" "
 					+ "FROM USERS US ");
 
-			if (Headquarter.equals("All") && modalidad.equals("All")) {
+			if (Headquarter.equals("Todo") && modalidad.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
 				TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
 				TableData.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
 				
-			} else if (Headquarter.equals("All")) {
+			} else if (Headquarter.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1=" + modalidad + " ");
-			} else if (modalidad.equals("All")) {
+			} else if (modalidad.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
 				TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
 				TableData.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
@@ -561,7 +561,7 @@ public class MonitoringTool {
 			ResultSet rSet = selectQuery.executeQuery();
 
 			RESULTS = "<select name='Modalidades' id='Modalidades'>";
-			RESULTS += "<option value='All' selected>All</option>";
+			RESULTS += "<option value='Todo' selected>Todo</option>";
 
 			while (rSet.next()) {
 				String primaryKey = rSet.getString("PK1");
@@ -616,7 +616,7 @@ public class MonitoringTool {
 			ResultSet rSet = selectQuery.executeQuery();
 
 			RESULTS = "<select name='Modalidades' id='Modalidades'>";
-			RESULTS += "<option value='All' selected>All</option>";
+			RESULTS += "<option value='Todo' selected>Todo</option>";
 
 			String Name = "";
 			
@@ -677,7 +677,7 @@ public class MonitoringTool {
 			ResultSet rSet = selectQuery.executeQuery();
 
 			RESULTS = "<select name='Headquarters' id='Headquarters'>";
-			RESULTS += "<option value='All' selected>All</option>";
+			RESULTS += "<option value='Todo' selected>Todo</option>";
 
 			while (rSet.next()) {
 				String value = rSet.getString(1);
@@ -1035,14 +1035,14 @@ public class MonitoringTool {
 					+ " US.EMAIL, US.B_PHONE_1, US.LAST_LOGIN_DATE, (systimestamp - US.LAST_LOGIN_DATE) \"Date Diff\" "
 					+ "FROM USERS US ");
 
-			if (Headquarter.equals("All") && modalidad.equals("All")) {
+			if (Headquarter.equals("Todo") && modalidad.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
 				TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
 				TableData.append("WHERE ROLE_NAME IN('Online','Semipresencial','Presencial')) ");
 				
-			} else if (Headquarter.equals("All")) {
+			} else if (Headquarter.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1=" + modalidad + " ");
-			} else if (modalidad.equals("All")) {
+			} else if (modalidad.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
 				TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
 				TableData.append("WHERE ROLE_NAME IN('Online','Semipresencial','Presencial')) ");
@@ -2678,7 +2678,7 @@ public class MonitoringTool {
 			TableData.append("		INNER JOIN INSTITUTION_ROLES IR ON US.INSTITUTION_ROLES_PK1 = IR.PK1");
 			TableData.append("		WHERE CU.ROLE = 'Docente'");
 			TableData.append("		AND CM.ROW_STATUS = 0");
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -3129,12 +3129,12 @@ public class MonitoringTool {
 			TableData.append("WHERE CU.ROLE = 'Docente' ");
 			TableData.append("AND CM.ROW_STATUS = 0 ");
 			
-			if (!modalidad.equals("All")){
+			if (!modalidad.equals("Todo")){
 				
 				TableData.append("AND CM.COURSE_ID LIKE '%-"+ modalidad +"'");
 			}
 
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -3504,12 +3504,12 @@ public class MonitoringTool {
 			TableData.append("WHERE CU.ROLE = 'Docente' ");
 			TableData.append("AND CM.ROW_STATUS = 0 ");
 			
-			if (!modalidad.equals("All")){
+			if (!modalidad.equals("Todo")){
 				
 				TableData.append("AND CM.COURSE_ID LIKE '%-"+ modalidad +"'");
 			}
 
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -3918,12 +3918,12 @@ public class MonitoringTool {
 			TableData.append("WHERE CU.ROLE = 'Docente' ");
 			TableData.append("AND CM.ROW_STATUS = 0 ");
 			
-			if (!modalidad.equals("All")){
+			if (!modalidad.equals("Todo")){
 				
 				TableData.append("AND CM.COURSE_ID LIKE '%-"+ modalidad +"'");
 			}
 
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -4188,12 +4188,12 @@ public class MonitoringTool {
 			TableData.append("WHERE CU.ROLE = 'Docente' ");
 			TableData.append("AND CM.ROW_STATUS = 0 ");
 			
-			if (!modalidad.equals("All")){
+			if (!modalidad.equals("Todo")){
 				
 				TableData.append("AND CM.COURSE_ID LIKE '%-"+ modalidad +"'");
 			}
 
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -4382,7 +4382,7 @@ public class MonitoringTool {
 			TableData.append("		INNER JOIN INSTITUTION_ROLES IR ON US.INSTITUTION_ROLES_PK1 = IR.PK1");
 			TableData.append("		WHERE CU.ROLE = 'Docente'");
 			TableData.append("		AND CM.ROW_STATUS = 0");
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -4785,14 +4785,14 @@ public class MonitoringTool {
 					+ " US.EMAIL, US.LAST_LOGIN_DATE, (systimestamp - US.LAST_LOGIN_DATE) \"Date Diff\" "
 					+ "FROM USERS US ");
 
-			if (Headquarter.equals("All") && modalidad.equals("All")) {
+			if (Headquarter.equals("Todo") && modalidad.equals("Todo")) {
 				tableDataCount.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
 				tableDataCount.append("SELECT PK1 FROM INSTITUTION_ROLES ");
 				tableDataCount.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
 				
-			} else if (Headquarter.equals("All")) {
+			} else if (Headquarter.equals("Todo")) {
 				tableDataCount.append("WHERE US.INSTITUTION_ROLES_PK1=" + modalidad + " ");
-			} else if (modalidad.equals("All")) {
+			} else if (modalidad.equals("Todo")) {
 				tableDataCount.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
 				tableDataCount.append("SELECT PK1 FROM INSTITUTION_ROLES ");
 				tableDataCount.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
@@ -4954,7 +4954,7 @@ public class MonitoringTool {
 			TableData.append("		INNER JOIN INSTITUTION_ROLES IR ON US.INSTITUTION_ROLES_PK1 = IR.PK1");
 			TableData.append("		WHERE CU.ROLE = 'Docente'");
 			TableData.append("		AND CM.ROW_STATUS = 0");
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}
@@ -5051,12 +5051,12 @@ public class MonitoringTool {
 			TableData.append("WHERE CU.ROLE = 'Docente' ");
 			TableData.append("AND CM.ROW_STATUS = 0 ");
 			
-			if (!modalidad.equals("All")){
+			if (!modalidad.equals("Todo")){
 				
 				TableData.append("AND CM.COURSE_ID LIKE '%-"+ modalidad +"'");
 			}
 			
-			if (!Headquarter.equals("All")) {
+			if (!Headquarter.equals("Todo")) {
 
 				TableData.append("AND US.B_PHONE_1 = '" + Headquarter + "' ");
 			}

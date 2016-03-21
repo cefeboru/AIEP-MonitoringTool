@@ -30,7 +30,7 @@
 				<bbNG:stepSubmitButton id="SubmitButton" label="Submit"></bbNG:stepSubmitButton>
 			</bbNG:stepSubmit>
 
-			<bbNG:step id="StudentReport" title="Control de Estudiantes SP"
+			<bbNG:step id="StudentReport" title="Control de Estudiantes"
 				instructions=".">
 				<div id="StudentData"></div>
 
