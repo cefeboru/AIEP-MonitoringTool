@@ -8,4 +8,4 @@
 	response.setContentType("application/csv");
 	response.setHeader("content-disposition","filename=ControlEstudiantes.xls"); // Filename
 %>
-<html><body>${Results}</body></html>
+<html><body>${Results}</body></html> 
