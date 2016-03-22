@@ -264,26 +264,28 @@ public class MonitoringTool {
 
 			TableData.append("SELECT * FROM ( SELECT rownum rnum, a.* from (");
 			TableData.append("SELECT US.PK1, US.LASTNAME, US.FIRSTNAME, EXTRACT(year from US.DTCREATED) \"COHORTE\","
-					+ " US.EMAIL, US.LAST_LOGIN_DATE, (systimestamp - US.LAST_LOGIN_DATE) \"Date Diff\" "
-					+ "FROM USERS US ");
+					+ " US.EMAIL, US.LAST_LOGIN_DATE, (systimestamp - US.LAST_LOGIN_DATE) \"Date Diff\" ,IR.ROLE_ID, US.B_PHONE_1"
+					+ " FROM USERS US INNER JOIN INSTITUTION_ROLES IR ON US.INSTITUTION_ROLES_PK1=IR.PK1 ");
 
 			if (Headquarter.equals("Todo") && modalidad.equals("Todo")) {
-				TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
-				TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
-				TableData.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
+				TableData.append("WHERE IR.ROLE_ID IN ('Online','Semipresencial','Presencial') ");
+				//TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
+				//TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
+				//TableData.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
 				
 			} else if (Headquarter.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1=" + modalidad + " ");
 			} else if (modalidad.equals("Todo")) {
-				TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
-				TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
-				TableData.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
+				TableData.append("WHERE IR.ROLE_ID IN ('Online','Semipresencial','Presencial') ");
+				//TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
+				//TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
+				//TableData.append("WHERE ROLE_ID IN('Online','Semipresencial','Presencial')) ");
 				TableData.append("AND US.B_PHONE_1 ='" + Headquarter + "' ");
-				TableData.append("AND US.B_PHONE_1 IS NOT NULL ");
+				//TableData.append("AND US.B_PHONE_1 IS NOT NULL ");
 			} else {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1=" + modalidad + " ");
 				TableData.append("AND US.B_PHONE_1= '" + Headquarter + "' ");
-				TableData.append("AND US.B_PHONE_1 IS NOT NULL ");
+				//TableData.append("AND US.B_PHONE_1 IS NOT NULL ");
 			}
 			TableData.append("AND US.SYSTEM_ROLE = 'N' ");
 			TableData.append("AND US.DATA_SRC_PK1 != 2 ");
@@ -305,14 +307,17 @@ public class MonitoringTool {
 
 			String ColumnName = "";
 
+			RESULTS += "<th data-column-id='modalidad'>MODALIDAD</th>";
+			RESULTS += "<th data-column-id='sede'>SEDE</th>";
+			
 			ColumnName = "APELLIDO";
 			RESULTS += "<th data-column-id='" + ColumnName + "'>" + ColumnName + "</th>";
 
 			ColumnName = "NOMBRES";
 			RESULTS += "<th data-column-id='" + ColumnName + "'>" + ColumnName + "</th>";
 
-			ColumnName = "COHORTE";
-			RESULTS += "<th data-column-id='" + ColumnName + "'>" + ColumnName + "</th>";
+			//ColumnName = "COHORTE";
+			//RESULTS += "<th data-column-id='" + ColumnName + "'>" + ColumnName + "</th>";
 
 			ColumnName = "EMAIL";
 			RESULTS += "<th data-column-id='" + ColumnName + "'>" + ColumnName + "</th>";
@@ -340,9 +345,10 @@ public class MonitoringTool {
 			ArrayList<ArrayList<String>> TableInfo = new ArrayList<ArrayList<String>>();
 			ArrayList<String> TempInfo = null;
 
+			String Modalidad = "";
+			String Sede = "";
 			String LastName = "";
 			String FirstName = "";
-			String Cohorte = "";
 			String Email = "";
 			String LastAccess = "";
 			String Status = "";
@@ -379,11 +385,14 @@ public class MonitoringTool {
 			}
 
 			while (rSet.next()) {
-
+				
+				
 				StudentIds.add(rSet.getString("PK1"));
+				Modalidad = rSet.getString("ROLE_ID");
+				Sede = rSet.getString("B_PHONE_1");
 				LastName = rSet.getString("LASTNAME");
 				FirstName = rSet.getString("FIRSTNAME");
-				Cohorte = rSet.getString("COHORTE");
+				//Cohorte = rSet.getString("COHORTE");
 				Email = rSet.getString("EMAIL");
 				LastAccess = rSet.getString("LAST_LOGIN_DATE");
 				Status = rSet.getString("Date Diff");
@@ -460,9 +469,11 @@ public class MonitoringTool {
 						+ "onclick='studentRecord(this);'>";
 
 				TempInfo = new ArrayList<String>();
+				TempInfo.add(Modalidad);
+				TempInfo.add(Sede);
 				TempInfo.add(LastName);
 				TempInfo.add(FirstName);
-				TempInfo.add(Cohorte);
+				//TempInfo.add(Cohorte);
 				TempInfo.add(Email);
 				TempInfo.add(LastAccess.split(" ")[0]);
 				TempInfo.add(Status);
@@ -482,22 +493,26 @@ public class MonitoringTool {
 				RESULTS += "<tr> No se encontraron elementos! </tr>";
 			} else
 				for (int i = 0; i < TableInfo.size(); i++) {
-
-					LastName = TableInfo.get(i).get(0);
-					FirstName = TableInfo.get(i).get(1);
-					Cohorte = TableInfo.get(i).get(2);
-					Email = TableInfo.get(i).get(3);
-					LastAccess = TableInfo.get(i).get(4);
-					Status = TableInfo.get(i).get(5);
-					SentEmail = TableInfo.get(i).get(6);
-					EmailResponse = TableInfo.get(i).get(7);
-					Contact = TableInfo.get(i).get(8);
-					History = TableInfo.get(i).get(9);
+					int j=0;
+					Modalidad = TableInfo.get(i).get(j++);
+					Sede = TableInfo.get(i).get(j++);
+					LastName = TableInfo.get(i).get(j++);
+					FirstName = TableInfo.get(i).get(j++);
+					//Cohorte = TableInfo.get(i).get(j++);
+					Email = TableInfo.get(i).get(j++);
+					LastAccess = TableInfo.get(i).get(j++);
+					Status = TableInfo.get(i).get(j++);
+					SentEmail = TableInfo.get(i).get(j++);
+					EmailResponse = TableInfo.get(i).get(j++);
+					Contact = TableInfo.get(i).get(j++);
+					History = TableInfo.get(i).get(j++);
 
 					RESULTS += "<tr>";
+					RESULTS += "<td id='Modalidad" + StudentIds.get(i) + "'>" + Modalidad + "</td>";
+					RESULTS += "<td id='Sede" + StudentIds.get(i) + "'>" + Sede + "</td>";
 					RESULTS += "<td id='Last" + StudentIds.get(i) + "'>" + LastName + "</td>";
 					RESULTS += "<td id='First" + StudentIds.get(i) + "'>" + FirstName + "</td>";
-					RESULTS += "<td id='Cohorte" + StudentIds.get(i) + "'>" + Cohorte + "</td>";
+					//RESULTS += "<td id='Cohorte" + StudentIds.get(i) + "'>" + Cohorte + "</td>";
 					RESULTS += "<td id='Email" + StudentIds.get(i) + "'>" + Email + "</td>";
 					RESULTS += "<td id='LastAccess" + StudentIds.get(i) + "'>" + LastAccess + "</td>";
 					RESULTS += "<td id='Status" + StudentIds.get(i) + "'>" + Status + "</td>";
@@ -985,18 +1000,19 @@ public class MonitoringTool {
 
 		ConnectionManager cManager = null;
 		Connection conn = null;
-		PreparedStatement selectQuery = null;
 		StringBuilder Data = new StringBuilder();
 
 		try {
 			Data.append("<table border=1>");
 			Data.append("<tr>");
+			Data.append("<td>MODALIDAD</td>");
+			Data.append("<td>SEDE</td>");
 			Data.append("<td>USER NAME</td>");
 			Data.append("<td>RUT</td>");
 			Data.append("<td>APELLIDOS</td>");
 			Data.append("<td>NOMBRES</td>");
 			Data.append("<td>EMAIL</td>");
-			Data.append("<td>SEDE</td>");
+
 			Data.append("<td>ULTIMO INGRESO</td>");
 			Data.append("<td>GESTION COORDINADOR</td>");
 			Data.append("<td>RESPUESTAS ESTUDIANTES</td>");
@@ -1008,34 +1024,28 @@ public class MonitoringTool {
 			
 			StringBuilder TableData = new StringBuilder();
 
-			TableData.append("SELECT US.USER_ID, US.STUDENT_ID, US.PK1, US.LASTNAME, US.FIRSTNAME,"
-					+ " US.EMAIL, US.B_PHONE_1, US.LAST_LOGIN_DATE, (systimestamp - US.LAST_LOGIN_DATE) \"Date Diff\" "
-					+ "FROM USERS US ");
-
+			TableData.append("SELECT US.PK1, US.LASTNAME, US.FIRSTNAME, US.STUDENT_ID, US.USER_ID,"
+					+ " US.EMAIL, US.LAST_LOGIN_DATE, (systimestamp - US.LAST_LOGIN_DATE) \"Date Diff\" , IR.ROLE_ID, US.B_PHONE_1"
+					+ " FROM USERS US INNER JOIN INSTITUTION_ROLES IR ON US.INSTITUTION_ROLES_PK1=IR.PK1 ");
 			if (Headquarter.equals("Todo") && modalidad.equals("Todo")) {
-				TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
-				TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
-				TableData.append("WHERE ROLE_NAME IN('Online','Semipresencial','Presencial')) ");
-				
+				TableData.append("WHERE IR.ROLE_ID IN ('Online','Semipresencial','Presencial') ");
 			} else if (Headquarter.equals("Todo")) {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1=" + modalidad + " ");
 			} else if (modalidad.equals("Todo")) {
-				TableData.append("WHERE US.INSTITUTION_ROLES_PK1 IN ( ");
-				TableData.append("SELECT PK1 FROM INSTITUTION_ROLES ");
-				TableData.append("WHERE ROLE_NAME IN('Online','Semipresencial','Presencial')) ");
+				TableData.append("WHERE IR.ROLE_ID IN ('Online','Semipresencial','Presencial') ");
 				TableData.append("AND US.B_PHONE_1 ='" + Headquarter + "' ");
 			} else {
 				TableData.append("WHERE US.INSTITUTION_ROLES_PK1=" + modalidad + " ");
 				TableData.append("AND US.B_PHONE_1= '" + Headquarter + "' ");
-				TableData.append("AND US.B_PHONE_1 IS NOT NULL ");
 			}
 			TableData.append("AND US.SYSTEM_ROLE = 'N' ");
 			TableData.append("AND US.DATA_SRC_PK1 != 2 ");
-			TableData.append(" ORDER BY LAST_LOGIN_DATE DESC ");
-
+			TableData.append(" ORDER BY LAST_LOGIN_DATE ASC ");
+			System.out.println("XLS EXPORT QUERY: " + TableData.toString()) ;
 			ResultSet rSet = conn.createStatement().executeQuery(TableData.toString());
 			ResultSet rSet2 = null;
-
+			
+			String Modalidad = "";
 			String userName = "";
 			String RUT = "";
 			String pk1 = "";
@@ -1053,6 +1063,7 @@ public class MonitoringTool {
 			String VerifyNoContact = "-";
 
 			while (rSet.next()) {
+				Modalidad = rSet.getString("ROLE_ID");
 				userName = rSet.getString("USER_ID");
 				RUT = rSet.getString("STUDENT_ID");
 				pk1 = rSet.getString("PK1");
@@ -1105,12 +1116,13 @@ public class MonitoringTool {
 				}
 
 				Data.append("<tr>");
+				Data.append("<td>"+Modalidad+"</td>");
+				Data.append("<td>"+Sede+"</td>");
 				Data.append("<td>"+userName+"</td>");
 				Data.append("<td>"+RUT+"</td>");
 				Data.append("<td>"+LastName+"</td>");
 				Data.append("<td>"+FirstName+"</td>");
 				Data.append("<td>"+Email+"</td>");
-				Data.append("<td>"+Sede+"</td>");
 				Data.append("<td>"+Last_Access+"</td>");
 				Data.append("<td>"+Coordinator+"</td>");
 				Data.append("<td>"+Student+"</td>");
@@ -1125,10 +1137,13 @@ public class MonitoringTool {
 			rSet.close();
 
 		} catch (ConnectionNotAvailableException e) {
+			System.out.print(e.getFullMessageTrace());
 			Results += "Error: " + e.getLocalizedMessage();
-			e.printStackTrace();
+			//e.printStackTrace();
 		} catch (SQLException e) {
+			System.out.print(e.getMessage());
 			e.printStackTrace();
+			//e.printStackTrace();
 			Results += "Error: " + e.getLocalizedMessage();
 		}
 		Data.append("</table>");
@@ -5371,7 +5386,7 @@ public class MonitoringTool {
 		String pk1 = (String) request.getParameter("pk1");
 		//PrintWriter out = null;
 		String Results = "Results...";
-		System.out.format("EXCEL REPORT - Headquarter=%s, Modalidad=%s%n ",Headquarter,Modalidad);
+		//System.out.format("EXCEL REPORT - Headquarter=%s, Modalidad=%s%n ",Headquarter,Modalidad);
 		try {
 
 			if (Report != null) {
