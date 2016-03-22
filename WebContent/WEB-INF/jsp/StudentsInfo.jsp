@@ -1,5 +1,5 @@
 <div class="tablePagination">
-	<input id="pageNumber" type="number" value="${currentPage}" min="1" max="${totalPages}">
+	<input id="pageNumber" type="number" value="${currentPage}" min="1" max="${totalPages}" onkeypress="keyPressed()">
 	<label> de ${totalPages} paginas.</label> 
 	<button class="button" onclick="selectPage(pageNumber.value)">Ir</button>
 </div>
@@ -19,10 +19,10 @@ ${HTMLTable}
 	}
 </style>
 <script>
-	pageNumber.onkeypress = function(e) { 
-		var key_code = e.keyCode;
-		if(key_code == 13){ 
-			selectPage(pageNumber.value) 
+		function keyPressed(e)  {
+			var key_code = e.keyCode;
+			if(key_code == 13){ 
+				selectPage(pageNumber.value) 
+			}
 		}
-	}
 </script>
